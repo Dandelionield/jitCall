@@ -1,12 +1,19 @@
 import { NgModule, Optional, SkipSelf } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 
 import { firebaseConfig } from './firebase/firebase.config';
 
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { provideAuth, getAuth } from '@angular/fire/auth';
 
 import { UserService } from './services/user/user.service';
 import { ContactService } from './services/contact/contact.service';
+import { AuthService } from './services/auth/auth.service';
+import { AuthGuard } from './guards/auth/auth.guard';
 
 @NgModule({
 
@@ -32,8 +39,14 @@ import { ContactService } from './services/contact/contact.service';
 
 			() => getFirestore()
 
+		), provideAuth(
+
+			() => getAuth()
+
 		), UserService,
-		ContactService
+		ContactService,
+		AuthService,
+		AuthGuard
 
 	]
 

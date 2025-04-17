@@ -1,0 +1,98 @@
+
+.loading-overlay {
+
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(255, 255, 255, 0.95);
+	z-index: 9999;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	opacity: 0;
+	visibility: hidden;
+	transition: all 0.3s ease-in-out;
+	
+	&.active {
+
+		opacity: 1;
+		visibility: visible;
+
+	}
+
+}
+
+.loader-container {
+
+	text-align: center;
+
+}
+
+.spinner {
+
+	position: relative;
+	width: 80px;
+	height: 80px;
+	margin: 0 auto;
+
+}
+
+.spinner-sector {
+
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	border: 4px solid transparent;
+	mix-blend-mode: overlay;
+
+}
+
+.spinner-sector-1 {
+
+	border-top-color: #4299e1;
+	animation: rotate 1s linear infinite;
+
+}
+
+.spinner-sector-2 {
+
+	border-left-color: #48bb78;
+	animation: rotate 0.75s linear infinite reverse;
+
+}
+
+.spinner-sector-3 {
+
+	border-right-color: #9f7aea;
+	animation: rotate 0.5s linear infinite;
+
+}
+
+@keyframes rotate {
+
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+
+}
+
+.loading-text {
+
+	margin-top: 1.5rem;
+	color: #2d3748;
+	font-size: 1.2rem;
+	font-weight: 500;
+	letter-spacing: 0.05em;
+	animation: pulse 1.5s ease-in-out infinite;
+
+}
+
+@keyframes pulse {
+
+	0% { opacity: 0.5; }
+	50% { opacity: 1; }
+	100% { opacity: 0.5; }
+
+}

@@ -3,12 +3,12 @@ import { ContactService } from '@core/services/contact/contact.service';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IUserQuery } from './interfaces/user.query.interface';
 import { User } from '@entities/user.entity';
-import { Contact, RawContact } from '@entities/contact.entity';
+import { Contact } from '@entities/contact.entity';
 import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, from, throwError, combineLatest } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, query, where } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -33,6 +33,20 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 			}
 
 		) as Observable<User>;
+
+	}
+
+	public findOneByUID(key: string): Observable<User | undefined> {
+
+		return collectionData(query(collection(this.firestore, this.collectionName), where('uid', '==', key), limit(1)), {
+
+			idField: this.collectionIDField as keyof User
+
+		}).pipe(map(
+
+			users => users[0] as User | undefined
+
+		)) as Observable<User>;
 
 	}
 
@@ -71,28 +85,6 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 			})
 
 		) as Observable<User>;
-
-	}
-
-	public findByName(name: string): Observable<Array<User>> {
-
-		return from(getDocs(query(collection(this.firestore, this.collectionName)))).pipe(
-
-			map(snapshot => snapshot.docs.map(
-
-				doc => ({
-
-					id: doc.id,
-					...doc.data()
-				}) as User
-				
-			).filter(
-
-				User => User.name.toLowerCase().includes(name.toLowerCase().trim())
-
-			))
-
-		);
 
 	}
 

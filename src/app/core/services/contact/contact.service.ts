@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
 import { IStatement } from '@interfaces/statement/statement.interface';
-import { IQuery } from '@interfaces/query/query.interface';
-import { Contact, RawContact } from '@entities/contact.entity';
+import { IContactQuery } from './interfaces/contact.query.interface';
+import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
 import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
@@ -13,7 +13,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	providedIn: 'root'
 
-}) export class ContactService implements IQuery<Contact, 'id'>, IStatement<Contact, 'id'>{
+}) export class ContactService implements IContactQuery<Contact, 'id'>, IStatement<Contact, 'id'>{
 
 	private readonly superCollectionName: string = environment.firebase.collections.user.name;
 	private readonly collectionName: string = environment.firebase.collections.contact.name;
@@ -38,36 +38,28 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 			}
 
-		).pipe(
+		) as Observable<Contact>;
 
-			switchMap((rawContact) => {
+	}
 
-				if (!rawContact) return of(undefined);
+	public findByName(name: string): Observable<Array<Contact>> {
+
+		return from(getDocs(query(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`)))).pipe(
+
+			map(snapshot => snapshot.docs.map(
+
+				doc => ({
+
+					id: doc.id,
+					...doc.data()
+
+				}) as Contact
 				
-				const userRef = rawContact.user as DocumentReference<User>;
-				
-				return docData<User>(userRef).pipe(
+			).filter(
 
-					map(user => ({
+				Contact => Contact.name.toLowerCase().includes(name.toLowerCase().trim())
 
-						id: userRef.id,
-						...user
-
-					})), map(user => ({
-
-						...rawContact,
-						user: user
-
-					}) as Contact)
-
-				);
-
-			}), catchError(error => {
-
-				console.error('Error fetching contact:', error);
-				return of(undefined);
-
-			})
+			))
 
 		);
 
@@ -75,48 +67,11 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	public findAll(): Observable<Array<Contact>> {
 
-		return from(getDocs(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`))).pipe(
+		return collectionData(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`), {
 
-			switchMap((rawContacts) => {
+			idField: this.collectionIDField as keyof Contact
 
-				if (rawContacts.empty) return of([]);
-
-				return combineLatest(rawContacts.docs.map(rawContact => {
-
-					const rawData = rawContact.data() as RawContact;
-					const userRef = rawData.user as DocumentReference<User>;
-
-					return docData<User>(userRef).pipe(
-
-						map(user => ({
-
-							id: userRef.id,
-							...user
-
-						}))
-
-					).pipe(
-
-						map(user => ({
-
-							id: rawContact.id,
-							...rawData,
-							user: user
-
-						}) as Contact)
-
-					);
-
-				}));
-
-			}), catchError(error => {
-
-				console.error('Error fetching contacts:', error);
-				return of([]);
-
-			})
-
-		);
+		}) as Observable<Array<Contact>>;
 
 	}
 

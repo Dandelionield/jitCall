@@ -1,0 +1,19 @@
+
+<div class="contact-card">
+
+	<img [src]="contact.picture" class="avatar">
+
+	<div class="contact-info">
+
+		<h3>{{ contact.name }} {{ contact.surname }}</h3>
+		<p class="phone">{{ contact.contact }}</p>
+
+	</div>
+
+	<ion-button fill="clear" class="edit-btn" (click)="navigateToUpdate()">
+
+		<ion-icon name="create-outline"></ion-icon>
+
+	</ion-button>
+
+</div>

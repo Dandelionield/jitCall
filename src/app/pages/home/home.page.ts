@@ -1,6 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
+import { AuthService } from '@core/services/auth/auth.service';
+import { Contact } from '@entities/contact.entity';
+import { User } from '@entities/user.entity';
+import { Router } from '@angular/router';
+import { LoadingService } from '@shared/services/loading/loading.service';
 
 @Component({
 
@@ -11,62 +16,88 @@ import { ContactService } from '@core/services/contact/contact.service';
 
 }) export class HomePage {
 
-	public constructor(private userService: UserService, private contactService: ContactService) {
+	public user: User | undefined = undefined;
+	public contacts!: Array<Contact>;
+	public searchText: string = "";
 
-		this.userService.findOne('SjbMJji58vhNGSsqlKWb').subscribe({
+	public constructor(
+
+		private userService: UserService,
+		private contactService: ContactService,
+		private authService: AuthService,
+		private router: Router,
+		private loadingService: LoadingService
+
+	){}
+
+	public ngOnInit(): void {
+
+		this.loadingService.show();
+
+		let id: string | null = this.authService.getCurrentUser();
+
+		//console.log("id: "+id);
+
+		if (id!=null){
+
+			this.userService.findOneByUID(id).subscribe({
+
+				next: (t) => {
+
+					if (t!=undefined && t.id!=undefined){
+
+						this.user = t;
+
+						this.contactService.setSuperKey(t.id);//('jrdMvZOMBmKcMsJHGULR');
+						this.findAll();
+
+					}
+
+				}, error: (e) => console.error('Error:', e)
+
+			});
+
+		}
+
+	}
+
+	public findAll(): void {
+
+		this.contactService.findAll().subscribe({
 
 			next: (t) => {
 
-				if (t!=undefined && t.id!=undefined){
-
-					this.contactService.setSuperKey(t.id);
-
-					this.contactService.findOne('YUz5oLezXeSjA5dCctNH').subscribe({
-
-						next: (u) => {
-
-							console.log(u);
-
-						}, error: (er) => {
-
-							console.error('Error:', er);
-
-						}
-
-					});
-
-					/*this.contactService.findAll().subscribe({
-
-						next: (u) => {
-
-							console.log('Array: ');
-							console.log(u);
-
-						}, error: (er) => {
-
-							console.log('Error');
-							console.log(er);
-							console.error('Error:', er);
-
-						}
-
-					});/**/
-
-				}
+				this.contacts = t;
+				this.loadingService.hide();
 
 			}, error: (e) => console.error('Error:', e)
 
-		});/**/
+		});
 
-		/*this.userService.findOneWithContacts('SjbMJji58vhNGSsqlKWb').subscribe({
+	}
 
-			next: (t) => {
+	public findByName(): void {
 
-				console.log(t);
+		if (this.searchText!==""){
 
-			}, error: (e) => console.error('Error:', e)
+			this.contactService.findByName(this.searchText).subscribe({
 
-		});/**/
+				next: (t) => this.contacts = t,
+				error: (e) => console.error('Error:', e)
+
+			});
+
+		}else{
+
+			this.findAll();
+
+		}
+
+	}
+
+	public navigateToInsert(): void {
+
+		this.router.navigate(['/add']);
 
 	}
 

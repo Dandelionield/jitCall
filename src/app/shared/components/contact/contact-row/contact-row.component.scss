@@ -1,0 +1,62 @@
+
+.contact-card {
+
+	display: flex;
+	align-items: center;
+	padding: 16px;
+	border-radius: 12px;
+	box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+	transition: transform 0.2s;
+	cursor: pointer;
+
+	&:hover {
+
+		transform: translateY(-2px);
+
+	}
+
+}
+
+.avatar {
+
+	width: 48px;
+	height: 48px;
+	border-radius: 50%;
+	margin-right: 16px;
+	object-fit: cover;
+
+}
+
+.contact-info {
+
+	flex: 1;
+	
+	h3 {
+
+		margin: 0;
+		font-size: 1.1rem;
+
+	}
+
+	.phone {
+
+		margin: 4px 0 0;
+		font-size: 0.9rem;
+
+	}
+
+}
+
+.edit-btn {
+
+	--color: #03fc5a;
+	--padding-start: 8px;
+	--padding-end: 8px;
+	
+	ion-icon {
+
+		font-size: 1.4rem;
+
+	}
+
+}

@@ -6,13 +6,19 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
-//import { TaskCardComponent } from './components/task-card/task-card.component';
+import { ContactRowComponent } from './components/contact/contact-row/contact-row.component';
+import { HeaderComponent } from './components/header/header.component';
+import { LoadingComponent } from './components/loading/loading.component';
+
+import { LoadingService } from './services/loading/loading.service';
 
 @NgModule({
 
 	declarations: [
 
-		//TaskCardComponent
+		ContactRowComponent,
+		HeaderComponent,
+		LoadingComponent,
 
 	], imports: [
 
@@ -29,11 +35,13 @@ import { RouterModule } from '@angular/router';
 		IonicModule,
 		ReactiveFormsModule,
 		RouterModule,
-		//TaskCardComponent
+		ContactRowComponent,
+		HeaderComponent,
+		LoadingComponent,
 
 	], providers: [
 
-		
+		LoadingService
 
 	]
 

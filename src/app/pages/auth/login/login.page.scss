@@ -1,0 +1,60 @@
+
+:host {
+
+	--ion-background-color: #f8f9fa;
+
+}
+
+.auth-card {
+
+	max-width: 500px;
+	margin: 2rem auto;
+	border-radius: 12px;
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+
+}
+
+ion-input {
+
+	--background: #ffffff;
+	--border-radius: 8px;
+	--padding-start: 12px;
+	--padding-end: 12px;
+	--border: 1px solid #e9ecef;
+	margin-bottom: 1rem;
+
+}
+
+ion-button {
+
+	--border-radius: 8px;
+	--padding-top: 1rem;
+	--padding-bottom: 1rem;
+	font-weight: 500;
+
+}
+
+ion-note {
+
+	display: block;
+	font-size: 0.875rem;
+	margin: -1 rem 0 1rem 0;
+
+}
+
+@media (prefers-color-scheme: dark) {
+
+	:host {
+
+		--ion-background-color: #1a1a1a;
+
+	}
+	
+	ion-input {
+
+		--background: #2d2d2d;
+		--border-color: #3d3d3d;
+
+	}
+
+}

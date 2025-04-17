@@ -4,6 +4,9 @@ import { RouteReuseStrategy } from '@angular/router';
 import { CoreModule } from '@core/core.module';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AuthInterceptor } from '@core/interceptors/auth/auth.interceptor';
+
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
@@ -20,12 +23,22 @@ import { AppRoutingModule } from './app-routing.module';
 		AppRoutingModule,
 		CoreModule
 
-	], providers: [{
+	], providers: [
 
-		provide: RouteReuseStrategy,
-		useClass: IonicRouteStrategy
+		{
 
-	}], bootstrap: [
+			provide: RouteReuseStrategy,
+			useClass: IonicRouteStrategy
+
+		}, {
+
+			provide: HTTP_INTERCEPTORS,
+			useClass: AuthInterceptor,
+			multi: true
+
+		}
+	
+	], bootstrap: [
 
 		AppComponent
 
