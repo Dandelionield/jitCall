@@ -1,7 +1,7 @@
 
 export interface CloudinaryResource{
 
-	id: string,
+	id?: string,
 	url: string
 
 }

@@ -14,7 +14,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	providedIn: 'root'
 
-}) export class UserService implements IUserQuery<User, 'id'>, IStatement<User, 'id'>{
+}) export class UserService implements IUserQuery<User, 'id', Contact>, IStatement<User, 'id'>{
 
 	private readonly collectionName: string = environment.firebase.collections.user.name;
 	private readonly subCollectionName: string = environment.firebase.collections.contact.name;
@@ -39,6 +39,20 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 	public findOneByUID(key: string): Observable<User | undefined> {
 
 		return collectionData(query(collection(this.firestore, this.collectionName), where('uid', '==', key), limit(1)), {
+
+			idField: this.collectionIDField as keyof User
+
+		}).pipe(map(
+
+			users => users[0] as User | undefined
+
+		)) as Observable<User>;
+
+	}
+
+	public findOneByContact(contact: Contact): Observable<User | undefined> {
+
+		return collectionData(query(collection(this.firestore, this.collectionName), where('contact', '==', contact.contact), limit(1)), {
 
 			idField: this.collectionIDField as keyof User
 

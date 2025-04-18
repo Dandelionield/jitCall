@@ -7,10 +7,13 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { ContactRowComponent } from './components/contact/contact-row/contact-row.component';
+import { ContactTabComponent } from './components/contact/contact-tab/contact-tab.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
+import { CallComponent } from './components/call/call.component';
 
 import { LoadingService } from './services/loading/loading.service';
+import { CallService } from './services/call/call.service';
 import { SwalService } from './services/swal/swal.service';
 
 @NgModule({
@@ -18,8 +21,10 @@ import { SwalService } from './services/swal/swal.service';
 	declarations: [
 
 		ContactRowComponent,
+		ContactTabComponent,
 		HeaderComponent,
 		LoadingComponent,
+		CallComponent
 
 	], imports: [
 
@@ -37,13 +42,16 @@ import { SwalService } from './services/swal/swal.service';
 		ReactiveFormsModule,
 		RouterModule,
 		ContactRowComponent,
+		ContactTabComponent,
 		HeaderComponent,
 		LoadingComponent,
+		CallComponent
 
 	], providers: [
 
 		LoadingService,
-		SwalService
+		SwalService,
+		CallService
 
 	]
 

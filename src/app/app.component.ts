@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AuthService } from '@core/services/auth/auth.service';
+import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 @Component({
 
@@ -10,17 +10,9 @@ import { AuthService } from '@core/services/auth/auth.service';
 
 }) export class AppComponent {
 
-	public constructor(private authService: AuthService) {
+	public constructor(private capacitorService: CapacitorService) {
 
-		this.authService.authState$.subscribe({
-
-			next: (t) => {
-
-				
-
-			}, error: (e) => console.error('Error:', e)
-
-		});
+		this.capacitorService.init();
 
 	}
 

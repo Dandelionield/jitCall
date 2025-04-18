@@ -1,0 +1,32 @@
+
+<div class="call-overlay" [class.active]="isCalling$ | async">
+
+	@if(contact | async; as contactObj) {
+
+		<div class="call-content">
+
+			<img [src]="contactObj.picture" class="user-avatar" alt="Profile picture">
+
+			<h2 class="user-name">{{ contactObj.name }} {{ contactObj.surname }}</h2>
+			
+			<div class="call-controls">
+
+				<ion-button fill="clear" class="control-btn" (click)="toggleCallType()">
+
+					<ion-icon [name]="callType ? 'call' : 'videocam'"></ion-icon>
+
+				</ion-button>
+
+				<ion-button fill="clear" class="hangup-btn" (click)="hangUp()">
+
+					<ion-icon name="call"></ion-icon>
+
+				</ion-button>
+
+			</div>
+
+		</div>
+
+	}
+
+</div>

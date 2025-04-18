@@ -17,6 +17,7 @@ import { ContactService } from './services/contact/contact.service';
 import { CloudinaryService } from './services/cloudinary/cloudinary.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { CapacitorService } from './services/capacitor/capacitor.service';
 
 @NgModule({
 
@@ -39,6 +40,7 @@ import { AuthGuard } from './guards/auth/auth.guard';
 		CloudinaryService,
 		AuthService,
 		AuthGuard,
+		CapacitorService,
 		provideFirebaseApp(
 
 			() => initializeApp(firebaseConfig)

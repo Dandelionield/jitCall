@@ -25,34 +25,7 @@
 
 	@if (isExpanded) {
 
-		<div class="expanded-card" (click)="toggleExpansion($event)">
-
-			<img [src]="contact.picture" class="expanded-avatar">
-
-			<div class="expanded-info">
-
-				<h2>{{ contact.name }} {{ contact.surname }}</h2>
-				<p class="email">{{ contact.email }}</p>
-
-				<div class="action-buttons">
-
-					<ion-button fill="clear" class="call-btn">
-
-						<ion-icon name="call-outline"></ion-icon>
-
-					</ion-button>
-
-					<ion-button fill="clear" class="video-call-btn">
-
-						<ion-icon name="videocam-outline"></ion-icon>
-
-					</ion-button>
-
-				</div>
-
-			</div>
-
-		</div>
+		<app-contact-tab [contact] = "contact" (click)="toggleExpansion($event)"></app-contact-tab>
 
 	}
 

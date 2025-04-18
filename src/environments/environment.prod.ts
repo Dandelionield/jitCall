@@ -37,7 +37,11 @@ export const environment = {
 			api_secret: 'n2b5YdbqCxrtNlRaOIOM7uZR43s',
 			secure: true
 
-		}
+		}, endpoints: {
+
+			img: '/resources/image/upload'
+
+		}, baseURL: 'https://api.cloudinary.com/v1_1/'
 
 	}
 
