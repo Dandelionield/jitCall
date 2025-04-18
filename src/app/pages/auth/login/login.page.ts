@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { Credential } from '@entities/credential.entity';
+import { SwalService } from '@shared/services/swal/swal.service';
+import { Credential } from '@models/credential.model';
 
 @Component({
 
@@ -20,18 +21,18 @@ import { Credential } from '@entities/credential.entity';
 
 	});
 
-	public constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+	public constructor(private fb: FormBuilder, private authService: AuthService, private swalService: SwalService, private router: Router) {}
 
 	public ngOnInit(): void {}
 
-	public async onSubmit(): Promise<void>{
+	public onSubmit(): void {
 
 		try{
 
 			if (this.loginForm.invalid) {
 
 				this.loginForm.markAllAsTouched();
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -40,7 +41,7 @@ import { Credential } from '@entities/credential.entity';
 
 			if (!email || !password) {
 
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -51,18 +52,20 @@ import { Credential } from '@entities/credential.entity';
 
 			};
 
-			const token = await this.authService.login(cred);
-
-			if (token){
+			this.authService.login(cred).then((token: string) => {
 
 				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
 
-			}
+			}).catch((e: any) => {
 
-		}catch (e){
+				this.swalService.showException('Error', e.message);
 
-			
+			});
+
+		}catch (e: any){
+
+			this.swalService.showException('Error', e.message);
 
 		}
 

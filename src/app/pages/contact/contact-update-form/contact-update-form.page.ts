@@ -2,11 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContactService } from '@core/services/contact/contact.service';
 import { UserService } from '@core/services/user/user.service';
+import { SwalService } from '@shared/services/swal/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
 import { LoadingService } from '@shared/services/loading/loading.service';
+import { SweetAlertResult } from 'sweetalert2';
 
 @Component({
 
@@ -35,9 +37,10 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 		private contactService: ContactService,
 		private userService: UserService,
 		private authService: AuthService,
+		private swalService: SwalService,
 		private loadingService: LoadingService,
 		private router: Router,
-		private ActiveRouter: ActivatedRoute
+		private activeRouter: ActivatedRoute
 
 	) {}
 
@@ -63,7 +66,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 					}
 
-				}, error: (e) => console.error('Error:', e)
+				}, error: (e) => this.swalService.showException('Error', e.message)
 
 			});
 
@@ -73,7 +76,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 	private loadContact(): void {
 
-		let id: string = this.ActiveRouter.snapshot.paramMap.get('id') as string;
+		let id: string = this.activeRouter.snapshot.paramMap.get('id') as string;
 
 		this.contactService.findOne(id).subscribe({
 
@@ -87,7 +90,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 				}
 
-			}, error: (e) => console.error('Error:', e)
+			}, error: (e) => this.swalService.showException('Error', e.message)
 
 		});
 
@@ -111,16 +114,55 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 	public async onDelete(): Promise<void> {
 
-		let success: boolean = await this.contactService.delete(this.contact.id as string);
-		this.router.navigate(['/home']);
+		let shot: SweetAlertResult = await this.swalService.getConfirmation('Question', `Are you sure you want to delete ${this.contact.name} ${this.contact.surname} from your contacts?`);
+
+		if (shot.isConfirmed){
+
+			this.delete();
+
+		}
 
 	}
 
 	public async onSubmit(): Promise<void> {
 
-		if (this.contactForm.invalid) return;
+		let shot: SweetAlertResult = await this.swalService.getConfirmation('Question', `Are you sure you want to update ${this.contact.name} ${this.contact.surname}'s contact information?`);
+
+		if (shot.isConfirmed){
+
+			this.update();
+
+		}
+
+	}
+
+	public async delete(): Promise<void> {
+
+		this.contactService.delete(this.contact.id as string).then((success: boolean) => {
+
+			if (!success){
+
+				this.swalService.showException('Error', 'Unable to delete');
+
+			}else{
+
+				this.router.navigate(['/home']);
+
+			}
+
+		}).catch((e: any) => {
+
+			this.swalService.showException('Error', e.message);
+
+		});
+
+	}
+
+	public async update(): Promise<void> {
 		
 		try{
+
+			if (this.contactForm.invalid) throw new Error('Invalid Paramethers');
 
 			const name = this.contactForm.get('name')?.value;
 			const surname = this.contactForm.get('surname')?.value;
@@ -130,7 +172,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 			if (!email || !picture || !name || !surname || !cont) {
 
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -144,14 +186,31 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 			};
 
-			let success: boolean = await this.contactService.update(this.contact.id as string, conta);
-			this.router.navigate(['/home']);
+			this.contactService.update(this.contact.id as string, conta).then((success: boolean) => {
 
-		}catch (e){
+				if (!success){
 
-			
+					this.swalService.showException('Error', 'Unable to update');
+
+				}else{
+
+					this.router.navigate(['/home']);
+
+				}
+
+			}).catch((e: any) => {
+
+				this.swalService.showException('Error', e.message);
+
+			});
+
+		}catch (e: any){
+
+			this.swalService.showException('Error', e.message);
 
 		}/**/
+
+		
 
 	}
 

@@ -52,21 +52,21 @@
 
 .spinner-sector-1 {
 
-	border-top-color: #4299e1;
+	border-top-color: RED;//#4299e1;
 	animation: rotate 1s linear infinite;
 
 }
 
 .spinner-sector-2 {
 
-	border-left-color: #48bb78;
+	border-left-color: RED;//#48bb78;
 	animation: rotate 0.75s linear infinite reverse;
 
 }
 
 .spinner-sector-3 {
 
-	border-right-color: #9f7aea;
+	border-right-color: RED;//#9f7aea;
 	animation: rotate 0.5s linear infinite;
 
 }
@@ -81,7 +81,7 @@
 .loading-text {
 
 	margin-top: 1.5rem;
-	color: #2d3748;
+	color: RED;//#2d3748;
 	font-size: 1.2rem;
 	font-weight: 500;
 	letter-spacing: 0.05em;

@@ -1,4 +1,4 @@
-import { Credential } from '@entities/credential.entity';
+import { Credential } from '@models/credential.model';
 import { User } from '@entities/user.entity';
 
 export interface IAuth<T extends Credential, U extends User>{

@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
+import { CloudinaryService } from '@core/services/cloudinary/cloudinary.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
 import { Router } from '@angular/router';
 import { LoadingService } from '@shared/services/loading/loading.service';
+import { SwalService } from '@shared/services/swal/swal.service';
 
 @Component({
 
@@ -25,8 +27,11 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 		private userService: UserService,
 		private contactService: ContactService,
 		private authService: AuthService,
-		private router: Router,
-		private loadingService: LoadingService
+		private swalService: SwalService,
+		private loadingService: LoadingService,
+		private cloudinaryService: CloudinaryService,
+		private router: Router
+		
 
 	){}
 
@@ -35,8 +40,6 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 		this.loadingService.show();
 
 		let id: string | null = this.authService.getCurrentUser();
-
-		//console.log("id: "+id);
 
 		if (id!=null){
 
@@ -53,7 +56,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 
 					}
 
-				}, error: (e) => console.error('Error:', e)
+				}, error: (e) => this.swalService.showException('Error', e.message)
 
 			});
 
@@ -70,7 +73,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 				this.contacts = t;
 				this.loadingService.hide();
 
-			}, error: (e) => console.error('Error:', e)
+			}, error: (e) => this.swalService.showException('Error', e.message)
 
 		});
 
@@ -83,7 +86,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 			this.contactService.findByName(this.searchText).subscribe({
 
 				next: (t) => this.contacts = t,
-				error: (e) => console.error('Error:', e)
+				error: (e) => this.swalService.showException('Error', e.message)
 
 			});
 

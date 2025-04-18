@@ -1,19 +1,59 @@
+<div class="contact-container">
 
-<div class="contact-card">
+	@if (!isExpanded) {
 
-	<img [src]="contact.picture" class="avatar">
+		<div class="compact-view" (click)="toggleExpansion($event)">
 
-	<div class="contact-info">
+			<img [src]="contact.picture" class="avatar">
 
-		<h3>{{ contact.name }} {{ contact.surname }}</h3>
-		<p class="phone">{{ contact.contact }}</p>
+			<div class="contact-info">
 
-	</div>
+				<h3>{{ contact.name }} {{ contact.surname }}</h3>
+				<p class="phone">{{ contact.contact }}</p>
 
-	<ion-button fill="clear" class="edit-btn" (click)="navigateToUpdate()">
+			</div>
 
-		<ion-icon name="create-outline"></ion-icon>
+			<ion-button fill="clear" class="edit-btn" (click)="navigateToUpdate($event)">
 
-	</ion-button>
+				<ion-icon name="create-outline"></ion-icon>
+
+			</ion-button>
+
+		</div>
+
+	}
+
+	@if (isExpanded) {
+
+		<div class="expanded-card" (click)="toggleExpansion($event)">
+
+			<img [src]="contact.picture" class="expanded-avatar">
+
+			<div class="expanded-info">
+
+				<h2>{{ contact.name }} {{ contact.surname }}</h2>
+				<p class="email">{{ contact.email }}</p>
+
+				<div class="action-buttons">
+
+					<ion-button fill="clear" class="call-btn">
+
+						<ion-icon name="call-outline"></ion-icon>
+
+					</ion-button>
+
+					<ion-button fill="clear" class="video-call-btn">
+
+						<ion-icon name="videocam-outline"></ion-icon>
+
+					</ion-button>
+
+				</div>
+
+			</div>
+
+		</div>
+
+	}
 
 </div>

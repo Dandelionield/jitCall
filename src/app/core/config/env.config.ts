@@ -10,3 +10,12 @@ export const firebaseConfig = {
 	appId: environment.firebase.credentials.appId
 
 };
+
+export const cloudinaryConfig = {
+
+	cloudName: environment.cloudinary.credentials.cloud_name, 
+	apiKey: environment.cloudinary.credentials.api_key, 
+	apiSecret: environment.cloudinary.credentials.api_secret,
+	secure: environment.cloudinary.credentials.secure
+
+};

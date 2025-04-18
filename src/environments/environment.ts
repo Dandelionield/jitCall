@@ -28,6 +28,21 @@ export const environment = {
 
 		}
 
+	}, cloudinary: {
+
+		credentials: {
+
+			cloud_name: 'dir7hha9x', 
+			api_key: '491513494693695', 
+			api_secret: 'n2b5YdbqCxrtNlRaOIOM7uZR43s',
+			secure: true
+
+		}, endpoints: {
+
+			img: '/resources/image/upload'
+
+		}, baseURL: 'https://api.cloudinary.com/v1_1/'
+
 	}
 
 };

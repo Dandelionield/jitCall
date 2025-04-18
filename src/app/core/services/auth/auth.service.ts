@@ -15,9 +15,10 @@ import {
 	setPersistence
 
 } from '@angular/fire/auth';
+import { FirebaseError } from '@angular/fire/app';
 import { UserService } from '@core/services/user/user.service';
 import { User } from '@entities/user.entity';
-import { Credential } from '@entities/credential.entity';
+import { Credential } from '@models/credential.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -50,9 +51,7 @@ import { Observable } from 'rxjs';
 
 	public getCurrentUser(): string | null{
 
-		if (this.auth.currentUser==null) return null;
-
-		return this.auth.currentUser.uid;
+		return this.auth.currentUser?.uid || null;
 
 	}
 
@@ -68,7 +67,7 @@ import { Observable } from 'rxjs';
 
 	}
 
-	public async login(cred: Credential): Promise<string | undefined> {
+	public async login(cred: Credential): Promise<string> {
 
 		try {
 
@@ -81,19 +80,27 @@ import { Observable } from 'rxjs';
 
 			}else{
 
-				return undefined;
+				throw new FirebaseError('404', 'Wrong credentials.');
 
 			}
 
 		}catch (e: any){
 
-			return undefined;
+			if (e instanceof FirebaseError){
+
+				throw e;
+
+			}else{
+
+				throw new Error(e.message);
+
+			}
 
 		}
 
 	}
 
-	public async logup(cred: Credential, user: User): Promise<string | undefined> {
+	public async logup(cred: Credential, user: User): Promise<string> {
 
 		try {
 
@@ -112,13 +119,21 @@ import { Observable } from 'rxjs';
 
 			}else{
 
-				return undefined
+				throw new FirebaseError('404', 'Wrong paramethers.');
 
 			}
 
-		}catch (error){
+		}catch (e: any){
 
-			return undefined;
+			if (e instanceof FirebaseError){
+
+				throw e;
+
+			}else{
+
+				throw new Error(e.message);
+
+			}
 
 		}
 

@@ -16,14 +16,23 @@ import { Router } from '@angular/router';
 		required: true
 
 	}) public contact!: Contact;
+	public isExpanded = false;
 
 	public constructor(private router: Router) {}
 
-	public ngOnInit() {}
+	public ngOnInit(): void {}
 
-	public navigateToUpdate(): void {
+	public navigateToUpdate(event: Event): void {
 
+		event.stopPropagation();
 		this.router.navigate(['/update', this.contact.id]);
+
+	}
+
+	public toggleExpansion(event: Event): void {
+
+		event.stopPropagation();
+		this.isExpanded = !this.isExpanded;
 
 	}
 

@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { Credential } from '@entities/credential.entity';
+import { Credential } from '@models/credential.model';
+import { SwalService } from '@shared/services/swal/swal.service';
+import { LoadingService } from '@shared/services/loading/loading.service';
 import { User } from '@entities/user.entity';
 
 @Component({
@@ -24,18 +26,26 @@ import { User } from '@entities/user.entity';
 
 	});
 
-	public constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {}
+	public constructor(
+
+		private fb: FormBuilder,
+		private authService: AuthService,
+		private swalService: SwalService,
+		private loadingService: LoadingService,
+		private router: Router
+
+	) {}
 
 	public ngOnInit(): void {}
 
-	public async onSubmit(): Promise<void>{
+	public onSubmit(): void {
 
 		try{
 
 			if (this.logupForm.invalid) {
 
 				this.logupForm.markAllAsTouched();
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -48,7 +58,7 @@ import { User } from '@entities/user.entity';
 
 			if (!email || !password || !name || !surname || !contact) {
 
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -64,22 +74,24 @@ import { User } from '@entities/user.entity';
 				name: name,
 				surname: surname,
 				contact: contact,
-				picture: 'https://ionicframework.com/docs/img/demos/avatar.svg'
+				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`//'https://ionicframework.com/docs/img/demos/avatar.svg'
 
 			}
 
-			const token = await this.authService.logup(cred, user);
-
-			if (token){
+			this.authService.logup(cred, user).then((token: string) => {
 
 				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
 
-			}
+			}).catch((e: any) => {
 
-		}catch (e){
+				this.swalService.showException('Error', e.message);
 
-			console.log(e);
+			});
+
+		}catch (e: any){
+
+			this.swalService.showException('Error', e.message);
 
 		}
 

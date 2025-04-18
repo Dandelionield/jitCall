@@ -11,6 +11,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
 
 import { LoadingService } from './services/loading/loading.service';
+import { SwalService } from './services/swal/swal.service';
 
 @NgModule({
 
@@ -41,7 +42,8 @@ import { LoadingService } from './services/loading/loading.service';
 
 	], providers: [
 
-		LoadingService
+		LoadingService,
+		SwalService
 
 	]
 

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContactService } from '@core/services/contact/contact.service';
 import { UserService } from '@core/services/user/user.service';
+import { LoadingService } from '@shared/services/loading/loading.service';
+import { SwalService } from '@shared/services/swal/swal.service';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@entities/contact.entity';
@@ -27,9 +29,21 @@ import { User } from '@entities/user.entity';
 
 	});
 
-	public constructor(private fb: FormBuilder, private contactService: ContactService, private userService: UserService, private authService: AuthService, private router: Router) {}
+	public constructor(
+
+		private fb: FormBuilder,
+		private contactService: ContactService,
+		private userService: UserService,
+		private authService: AuthService,
+		private swalService: SwalService,
+		private loadingService: LoadingService,
+		private router: Router
+
+	) {}
 
 	public async ngOnInit(): Promise<void> {
+
+		this.loadingService.show();
 
 		let id: string | null = this.authService.getCurrentUser();
 
@@ -45,9 +59,11 @@ import { User } from '@entities/user.entity';
 
 						this.user = t;
 
+						this.loadingService.hide();
+
 					}
 
-				}, error: (e) => console.error('Error:', e)
+				}, error: (e) => this.swalService.showException('Error', e.message)
 
 			});
 
@@ -55,11 +71,11 @@ import { User } from '@entities/user.entity';
 
 	}
 
-	public async onSubmit(): Promise<void> {
-
-		if (this.contactForm.invalid) return;
+	public onSubmit(): void {
 		
 		try{
+
+			if (this.contactForm.invalid) throw new Error('Invalid Paramethers');
 
 			const name = this.contactForm.get('name')?.value;
 			const surname = this.contactForm.get('surname')?.value;
@@ -69,7 +85,7 @@ import { User } from '@entities/user.entity';
 
 			if (!email || !picture || !name || !surname || !contact) {
 
-				return;
+				throw new Error('Invalid Paramethers');
 
 			}
 
@@ -79,16 +95,23 @@ import { User } from '@entities/user.entity';
 				surname: surname,
 				contact: contact,
 				email: email,
-				picture: picture
+				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`//picture
 
 			};
 
-			let id: string = await this.contactService.insert(cont);
-			this.router.navigate(['/home']);
+			this.contactService.insert(cont).then((id: string) => {
 
-		}catch (e){
+				this.router.navigate(['/home']);
 
-			
+			}).catch((e: any) => {
+
+				this.swalService.showException('Error', e.message);
+
+			});
+
+		}catch (e: any){
+
+			this.swalService.showException('Error', e.message);
 
 		}
 

@@ -1,17 +1,97 @@
 
-.contact-card {
+.contact-container {
+	margin: 8px 0;
+}
 
+.compact-view {
 	display: flex;
 	align-items: center;
-	padding: 16px;
-	border-radius: 12px;
-	box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-	transition: transform 0.2s;
+	padding: 12px;
+	border-radius: 8px;
+	background: #ffffff;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+	transition: all 0.3s ease;
 	cursor: pointer;
-
+	
 	&:hover {
-
 		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+	}
+}
+
+.expanded-card {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 20px;
+	border-radius: 16px;
+	background: #ffffff;
+	box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+	cursor: pointer;
+	animation: expand 0.3s ease;
+
+	.expanded-avatar {
+		width: 80px;
+		height: 80px;
+		border-radius: 50%;
+		margin-bottom: 16px;
+		object-fit: cover;
+		border: 2px solid #03fc5a;
+	}
+
+	.expanded-info {
+		text-align: center;
+		
+		h2 {
+			margin: 0 0 8px 0;
+			font-size: 1.4rem;
+			color: #2c3e50;
+		}
+
+		.email {
+			margin: 0 0 20px 0;
+			color: #7f8c8d;
+			font-size: 0.95rem;
+		}
+	}
+}
+
+.action-buttons {
+	display: flex;
+	justify-content: center;
+	gap: 24px;
+
+	ion-button {
+		--padding-start: 12px;
+		--padding-end: 12px;
+		
+		ion-icon {
+			font-size: 1.8rem;
+		}
+	}
+
+	.call-btn {
+		--color: #03fc5a;
+	}
+
+	.video-call-btn {
+		--color: #3498db;
+	}
+}
+
+@keyframes expand {
+
+	from {
+
+		opacity: 0;
+		transform: scale(0.9);
+
+	}
+
+	to {
+
+		opacity: 1;
+		transform: scale(1);
 
 	}
 
@@ -35,6 +115,7 @@
 
 		margin: 0;
 		font-size: 1.1rem;
+		color: #2c3e50;
 
 	}
 
@@ -42,6 +123,7 @@
 
 		margin: 4px 0 0;
 		font-size: 0.9rem;
+		color: #7f8c8d;
 
 	}
 
@@ -50,8 +132,6 @@
 .edit-btn {
 
 	--color: #03fc5a;
-	--padding-start: 8px;
-	--padding-end: 8px;
 	
 	ion-icon {
 
