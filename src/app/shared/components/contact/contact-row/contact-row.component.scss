@@ -1,9 +1,12 @@
 
 .contact-container {
+
 	margin: 8px 0;
+
 }
 
 .compact-view {
+
 	display: flex;
 	align-items: center;
 	padding: 12px;
@@ -14,9 +17,12 @@
 	cursor: pointer;
 	
 	&:hover {
+
 		transform: translateY(-2px);
 		box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+
 	}
+
 }
 
 @keyframes expand {

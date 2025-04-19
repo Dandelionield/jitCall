@@ -1,5 +1,6 @@
 
 .call-overlay {
+
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -15,11 +16,14 @@
 	background: var(--ion-background-color);
 	
 	&.active {
+
 		opacity: 1;
 		visibility: visible;
+
 	}
 
 	.call-content {
+
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -27,58 +31,123 @@
 		padding: 2rem;
 		width: 100%;
 		max-width: 500px;
+
 	}
 
 	.user-avatar {
+
 		width: 150px;
 		height: 150px;
 		border-radius: 50%;
 		object-fit: cover;
 		box-shadow: 0 4px 16px rgba(var(--ion-color-dark-rgb), 0.1);
+
+		&.video-mode {
+
+			position: absolute;
+			bottom: 1rem;
+			right: 1rem;
+			width: 80px;
+			height: 80px;
+			border: 2px solid var(--ion-color-light);
+
+		}
+
 	}
 
 	.user-name {
+
 		margin: 0;
 		font-size: 1.5rem;
 		font-weight: 600;
 		color: var(--ion-text-color);
+
 	}
 
 	.call-controls {
+
 		display: flex;
 		gap: 2rem;
 		margin-top: 2rem;
 
 		ion-button {
+
 			--padding: 16px;
 			width: 64px;
 			height: 64px;
 			transition: transform 0.2s ease;
 
 			&:active {
+
 				transform: scale(0.9);
+
 			}
+
 		}
 
 		.control-btn {
+
 			background: rgba(var(--ion-color-medium-rgb), 0.1);
 			border-radius: 50%;
 			
 			ion-icon {
+
 				font-size: 1.8rem;
 				color: var(--ion-color-medium);
+
 			}
+
 		}
 
 		.hangup-btn {
+
 			background: rgba(var(--ion-color-danger-rgb), 0.1);
 			border-radius: 50%;
 			
 			ion-icon {
+
 				font-size: 1.8rem;
 				color: var(--ion-color-danger);
 				transform: rotate(135deg);
+
 			}
+
 		}
+
 	}
+
+	.video-preview {
+
+		width: 100%;
+		max-width: 300px;
+		border-radius: 16px;
+		margin-bottom: 1rem;
+		transform: scaleX(-1);
+
+	}
+
+	.call-type-indicator {
+
+		position: absolute;
+		top: 1rem;
+		left: 1rem;
+		background: rgba(var(--ion-color-dark-rgb), 0.1);
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		font-size: 0.9rem;
+		
+		&[data-type="video"] {
+
+			color: var(--ion-color-primary);
+
+		}
+		
+		&[data-type="voice"] {
+
+			color: var(--ion-color-success);
+
+		}
+
+	}
+
 }

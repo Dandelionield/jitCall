@@ -14,6 +14,9 @@ import { Contact } from '@entities/contact.entity';
 	private _inComingContact: BehaviorSubject<Contact | null> = new BehaviorSubject<Contact | null>(null);
 	public inComingContact$: Observable<Contact | null> = this._inComingContact.asObservable();
 
+	private _callType: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+	public callType$: Observable<boolean> = this._callType.asObservable();
+
 	public constructor() {}
 
 	public show(): void {
@@ -25,6 +28,12 @@ import { Contact } from '@entities/contact.entity';
 	public hide(): void {
 
 		this._isCalling.next(false);
+
+	}
+
+	public setCallType(callType: boolean): void {
+
+		this._callType.next(callType);
 
 	}
 

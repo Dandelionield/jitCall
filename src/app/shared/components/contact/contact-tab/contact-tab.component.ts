@@ -44,7 +44,7 @@ import { User } from '@entities/user.entity';
 
 	}
 
-	public call(): void {
+	public call(callType: boolean = false): void {
 
 		this.user = this.userService.findOneByContact(this.contact).subscribe({
 
@@ -52,8 +52,10 @@ import { User } from '@entities/user.entity';
 
 				if (t!=undefined){
 
+					this.callService.setCallType(callType);
 					this.callService.answer(this.contact);
 					this.callService.show();
+					//this.callService.startCall(callType);
 
 				}else{
 
