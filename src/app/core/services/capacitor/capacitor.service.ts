@@ -18,7 +18,7 @@ import { User } from '@entities/user.entity';
 
 	public constructor(private http: HttpClient) {}
 
-	public async init(): Promise<string | null> {
+	public async init(): Promise<string | undefined> {
 
 		if (Capacitor.getPlatform() !== 'web'){
 
@@ -27,7 +27,7 @@ import { User } from '@entities/user.entity';
 
 		}
 
-		return null;
+		return undefined;
 
 	}
 
@@ -43,7 +43,7 @@ import { User } from '@entities/user.entity';
 
 	}
 
-	private async addListeners(): Promise<string | null> {
+	private async addListeners(): Promise<string | undefined> {
 
 		return new Promise((resolve, reject) => {
 
@@ -70,25 +70,26 @@ import { User } from '@entities/user.entity';
 
 	}
 
-	public sendNotification(token: string, user: User, meetingId: string, userFrom: string): Observable<any> {
+	public sendNotification(token: string, userFrom: User, userTo: User, meetingId: string): Observable<any> {
+
 		const payload = {
 
 			token: token,
 			notification: {
 
 				title: 'Incoming call',
-				body: `${user.name} ${user.surname} is calling you.`,
+				body: `${userFrom.name} ${userFrom.surname} is calling you.`,
 
 			}, android: {
 
 				priority: 'high',
 				data: {
 
-					userId: user.id,
+					userId: userTo.id,
 					meetingId: meetingId,
 					type: 'incoming_call',
-					name: user.name,
-					userFrom: userFrom,
+					name: userTo.name,
+					userFrom: userFrom.id,
 
 				}
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Contact } from '@entities/contact.entity';
+import { User } from '@entities/user.entity';
 import { Router } from '@angular/router';
 
 @Component({
@@ -16,6 +17,7 @@ import { Router } from '@angular/router';
 		required: true
 
 	}) public contact!: Contact;
+
 	public isExpanded = false;
 
 	public constructor(private router: Router) {}

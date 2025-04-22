@@ -18,9 +18,10 @@ import {
 import { FirebaseError } from '@angular/fire/app';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 import { UserService } from '@core/services/user/user.service';
+import { ContactService } from '@core/services/contact/contact.service';
 import { User } from '@entities/user.entity';
 import { Credential } from '@models/credential.model';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 
 @Injectable({
 
@@ -28,12 +29,15 @@ import { Observable } from 'rxjs';
 
 }) export class AuthService implements IAuth<Credential, User>{
 
+	private _loggedUser: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
+	public loggedUser$: Observable<User | undefined> = this._loggedUser.asObservable();
 	public authState$: Observable<AuthUser | null>;
 
 	public constructor(
 
 		private auth: Auth,
 		private userService: UserService,
+		private contactService: ContactService,
 		private capacitorService: CapacitorService
 
 	){
@@ -46,6 +50,9 @@ import { Observable } from 'rxjs';
 
 				const token = await user.getIdToken();
 				localStorage.setItem('access_token', token);
+
+				let u: User | undefined = await this.userService.findOne(user.uid);
+				this._loggedUser.next(u);
 
 			}else{
 
@@ -83,27 +90,24 @@ import { Observable } from 'rxjs';
 			
 			if (userCredential.user) {
 
-				let DToken: string | null = await this.capacitorService.init();
-				let uid: string = await userCredential.user.getIdToken();
+				let DToken: string | undefined = await this.capacitorService.init();
+				let UToken: string = await userCredential.user.getIdToken();
 
-				let tokens: Token = {
+				let user: User | undefined = await this.userService.findOne(userCredential.user.uid);
 
-					UserToken: uid
+				if (DToken!=undefined){
 
-				};
+					this.userService.update(userCredential.user.uid, {
 
-				if (DToken!=null){
+						token: DToken
 
-					tokens = {
-
-						DiviceToken: DToken,
-		          		...tokens
-
-					};
+					});
 
 				}
 
-				return uid;
+				this._loggedUser.next(user);
+
+				return UToken;
 
 			}else{
 
@@ -135,17 +139,21 @@ import { Observable } from 'rxjs';
 
 			if (userCredential.user) {
 
-				let DToken: string | null = await this.capacitorService.init();
-				let uid: string = await userCredential.user.getIdToken();
+				let DToken: string | undefined = await this.capacitorService.init();
+				let UToken: string = await userCredential.user.getIdToken();
 
-				let id: string = await this.userService.insert({
+				user.id = userCredential.user.uid;
 
-					uid: uid,
+				let id: string = await this.userService.insert(DToken!=undefined ? {
+
+					token: DToken,
 					...user
 
-				});
+				} : user);
 
-				return uid;
+				this._loggedUser.next(user);
+
+				return UToken;
 
 			}else{
 
@@ -172,6 +180,7 @@ import { Observable } from 'rxjs';
 	public async logout(): Promise<void> {
 
 		localStorage.removeItem('access_token');
+		this._loggedUser.next(undefined);
 		await signOut(this.auth);
 
 	}

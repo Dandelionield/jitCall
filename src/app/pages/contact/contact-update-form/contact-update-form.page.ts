@@ -52,47 +52,44 @@ import { SweetAlertResult } from 'sweetalert2';
 
 		if (id!=null){
 
-			this.userService.findOneByUID(id).subscribe({
+			this.contactService.setSuperKey(id);
 
-				next: (t) => {
+			let user: User | undefined = await this.userService.findOne(id);
 
-					if (t!=undefined && t.id!=undefined){
+			if (user){
 
-						this.user = t;
+				this.user = user;
 
-						this.contactService.setSuperKey(t.id);
+			}
 
-						this.loadContact();
+			this.loadContact();
 
-					}
+		}else{
 
-				}, error: (e) => this.swalService.showException('Error', e.message)
-
-			});
+			this.loadingService.hide();
 
 		}
 
 	}
 
-	private loadContact(): void {
+	private async loadContact(): Promise<void> {
 
 		let id: string = this.activeRouter.snapshot.paramMap.get('id') as string;
 
-		this.contactService.findOne(id).subscribe({
+		let contact: Contact | undefined = await this.contactService.findOne(id);
 
-			next: (d) => {
+		if (contact){
 
-				if (d!=undefined){
+			this.contact = {
 
-					this.contact = d;
+				id: id,
+				...contact
 
-					this.loadForm();
+			};
 
-				}
+			this.loadForm();
 
-			}, error: (e) => this.swalService.showException('Error', e.message)
-
-		});
+		}
 
 	}
 

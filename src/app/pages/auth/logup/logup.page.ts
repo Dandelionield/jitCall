@@ -40,6 +40,8 @@ import { User } from '@entities/user.entity';
 
 	public onSubmit(): void {
 
+		this.loadingService.show();
+
 		try{
 
 			if (this.logupForm.invalid) {
@@ -78,7 +80,7 @@ import { User } from '@entities/user.entity';
 
 			}
 
-			/*this.authService.logup(cred, user).then((token: string) => {
+			this.authService.logup(cred, user).then((token: string) => {
 
 				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
@@ -87,13 +89,15 @@ import { User } from '@entities/user.entity';
 
 				this.swalService.showException('Error', e.message);
 
-			});/**/
+			});
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
 		}
+
+		this.loadingService.hide();
 
 	}
 

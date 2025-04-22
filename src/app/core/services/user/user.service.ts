@@ -8,7 +8,7 @@ import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, from, throwError, combineLatest } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, query, where, limit } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, getDocs, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -22,31 +22,14 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	public constructor(private firestore: Firestore, private contactService: ContactService) {}
 
-	public findOne(key: string): Observable<User | undefined> {
+	public findOne(key: string): Promise<User | undefined> {
 
-		return docData(
+		return getDoc(doc(
 
-			doc(this.firestore, `${this.collectionName}/${key}`),{
+			collection(this.firestore, this.collectionName),
+			key
 
-				idField: this.collectionIDField as keyof User
-
-			}
-
-		) as Observable<User>;
-
-	}
-
-	public findOneByUID(key: string): Observable<User | undefined> {
-
-		return collectionData(query(collection(this.firestore, this.collectionName), where('uid', '==', key), limit(1)), {
-
-			idField: this.collectionIDField as keyof User
-
-		}).pipe(map(
-
-			users => users[0] as User | undefined
-
-		)) as Observable<User>;
+		)).then((snapshot) => snapshot.data()) as Promise<User | undefined>;
 
 	}
 
@@ -114,14 +97,9 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
  
 	public async insert(entity: User): Promise<string> {
 
-		const doc = await addDoc(
+		await setDoc(doc(this.firestore, `${this.collectionName}/${entity.id as string}`), entity);
 
-			collection(this.firestore, this.collectionName),
-			entity
-
-		);
-
-		return doc.id;
+		return entity.id as string;
 
 	}
 

@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
-import { CloudinaryService } from '@core/services/cloudinary/cloudinary.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
@@ -16,9 +15,8 @@ import { SwalService } from '@shared/services/swal/swal.service';
 	styleUrls: ['home.page.scss'],
 	standalone: false,
 
-}) export class HomePage {
+}) export class HomePage implements OnInit, OnDestroy {
 
-	public user: User | undefined = undefined;
 	public contacts!: Array<Contact>;
 	public searchText: string = "";
 
@@ -29,7 +27,6 @@ import { SwalService } from '@shared/services/swal/swal.service';
 		private authService: AuthService,
 		private swalService: SwalService,
 		private loadingService: LoadingService,
-		private cloudinaryService: CloudinaryService,
 		private router: Router
 		
 
@@ -41,28 +38,17 @@ import { SwalService } from '@shared/services/swal/swal.service';
 
 		let id: string | null = this.authService.getCurrentUser();
 
-		if (id!=null){
+		if (id){
 
-			this.userService.findOneByUID(id).subscribe({
-
-				next: (t) => {
-
-					if (t!=undefined && t.id!=undefined){
-
-						this.user = t;
-
-						this.contactService.setSuperKey(t.id);//('jrdMvZOMBmKcMsJHGULR');
-						this.findAll();
-
-					}
-
-				}, error: (e) => this.swalService.showException('Error', e.message)
-
-			});
+			this.contactService.setSuperKey(id);
 
 		}
 
+		this.findAll();
+
 	}
+
+	public ngOnDestroy(): void {}
 
 	public findAll(): void {
 

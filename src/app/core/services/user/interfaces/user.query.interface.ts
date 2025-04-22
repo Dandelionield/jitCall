@@ -5,8 +5,6 @@ import { Contact } from '@entities/contact.entity';
 
 export interface IUserQuery<U extends User, K extends keyof U, C extends Contact> extends IQuery<U, K>{
 
-	findOneByUID(key: U['uid']): Observable<U | undefined>;
-
 	findOneByContact(contact: C): Observable<U | undefined>;
 
 	findOneWithContacts(key: U[K]): Observable<U | undefined>;

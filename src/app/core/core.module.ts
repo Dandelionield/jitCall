@@ -14,7 +14,6 @@ import { Cloudinary } from '@cloudinary/url-gen';
 
 import { UserService } from './services/user/user.service';
 import { ContactService } from './services/contact/contact.service';
-import { CloudinaryService } from './services/cloudinary/cloudinary.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { CapacitorService } from './services/capacitor/capacitor.service';
@@ -37,7 +36,6 @@ import { CapacitorService } from './services/capacitor/capacitor.service';
 
 		UserService,
 		ContactService,
-		CloudinaryService,
 		AuthService,
 		AuthGuard,
 		CapacitorService,
@@ -53,24 +51,7 @@ import { CapacitorService } from './services/capacitor/capacitor.service';
 
 			() => getAuth()
 
-		), {
-
-			provide: 'CLOUDINARY',
-			useFactory: () => {
-
-				return new Cloudinary({
-
-					cloud: {
-
-						...cloudinaryConfig
-
-					}
-
-				});
-
-			}
-
-		}
+		)
 
 	]
 

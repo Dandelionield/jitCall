@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { CallService } from '@shared/services/call/call.service';
+import { CapacitorService } from '@core/services/capacitor/capacitor.service';
+import { AuthService } from '@core/services/auth/auth.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { Subscription, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
@@ -20,10 +22,19 @@ import { User } from '@entities/user.entity';
 		required: true
 
 	}) public contact!: Contact;
+
 	public user: Subscription | undefined = undefined;
 	public isCalling$: Observable<boolean> = this.callService.isCalling$;
 
-	public constructor(private callService: CallService, private swalService: SwalService, private userService: UserService) {}
+	public constructor(
+
+		private callService: CallService,
+		private capacitorService: CapacitorService,
+		private swalService: SwalService,
+		private userService: UserService,
+		private authService: AuthService
+
+	) {}
 
 	public ngOnInit(): void {
 
@@ -48,9 +59,23 @@ import { User } from '@entities/user.entity';
 
 		this.user = this.userService.findOneByContact(this.contact).subscribe({
 
-			next: (t) => {
+			next: async (t) => {
 
 				if (t!=undefined){
+
+					let id: string | null = this.authService.getCurrentUser();
+
+					if (id){
+
+						let u: User | undefined = await this.userService.findOne(id);
+
+						if (u){
+
+							this.capacitorService.sendNotification(u.token as string, u, u, '45hdfsy54hdfsyhdfs54y6');
+
+						}
+
+					}/**/
 
 					this.callService.setCallType(callType);
 					this.callService.answer(this.contact);

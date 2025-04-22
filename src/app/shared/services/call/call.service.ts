@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
+import { AuthService } from '@core/services/auth/auth.service';
+import { UserService } from '@core/services/user/user.service';
 
 @Injectable({
 
@@ -17,7 +19,19 @@ import { Contact } from '@entities/contact.entity';
 	private _callType: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public callType$: Observable<boolean> = this._callType.asObservable();
 
-	public constructor() {}
+	public constructor(private userService: UserService, private authService: AuthService) {
+
+		let id: string | null = this.authService.getCurrentUser();
+
+		if (id){
+
+			let u: User | undefined = await this.userService.findOne(id);
+
+			
+
+		}/**/
+
+	}
 
 	public show(): void {
 

@@ -30,15 +30,15 @@
 
 				</ion-button>
 
-				<ion-avatar class="user-avatar">
+				@if (user){
 
-					@if (user) {
+					<ion-avatar class="user-avatar" (click)="toggleExpansion($event)">
 
 						<img [src]="user.picture">
 
-					}
+					</ion-avatar>
 
-				</ion-avatar>
+				}
 
 			</div>
 
@@ -47,3 +47,9 @@
 	</ion-toolbar>
 
 </ion-header>
+
+@if (isExpanded && user){
+
+	<app-user-card [user] = "user" (click) = "toggleExpansion($event)"></app-user-card>
+
+}

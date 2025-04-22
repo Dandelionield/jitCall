@@ -8,6 +8,7 @@ import { RouterModule } from '@angular/router';
 
 import { ContactRowComponent } from './components/contact/contact-row/contact-row.component';
 import { ContactTabComponent } from './components/contact/contact-tab/contact-tab.component';
+import { UserCardComponent } from './components/user/user-card/user-card.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CallComponent } from './components/call/call.component';
@@ -22,6 +23,7 @@ import { SwalService } from './services/swal/swal.service';
 
 		ContactRowComponent,
 		ContactTabComponent,
+		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
 		CallComponent
@@ -43,6 +45,7 @@ import { SwalService } from './services/swal/swal.service';
 		RouterModule,
 		ContactRowComponent,
 		ContactTabComponent,
+		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
 		CallComponent

@@ -18,7 +18,6 @@ import { User } from '@entities/user.entity';
 
 }) export class ContactInsertFormPage implements OnInit {
 
-	public user!: User;
 	public contactForm = this.fb.group({
 
 		name: ['', [Validators.required, Validators.minLength(3)]],
@@ -41,35 +40,7 @@ import { User } from '@entities/user.entity';
 
 	) {}
 
-	public async ngOnInit(): Promise<void> {
-
-		this.loadingService.show();
-
-		let id: string | null = this.authService.getCurrentUser();
-
-		if (id!=null){
-
-			this.userService.findOneByUID(id).subscribe({
-
-				next: (t) => {
-
-					if (t!=undefined && t.id!=undefined){
-
-						this.contactService.setSuperKey(t.id);
-
-						this.user = t;
-
-						this.loadingService.hide();
-
-					}
-
-				}, error: (e) => this.swalService.showException('Error', e.message)
-
-			});
-
-		}
-
-	}
+	public async ngOnInit(): Promise<void> {}
 
 	public onSubmit(): void {
 		

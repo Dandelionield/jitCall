@@ -7,7 +7,7 @@ import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { forkJoin, Observable, of, from, throwError, combineLatest } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, query, where, DocumentReference } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, getDoc, query, where, DocumentReference } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -28,17 +28,14 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public findOne(key: string): Observable<Contact | undefined> {
+	public findOne(key: string): Promise<Contact | undefined> {
 
-		return docData(
+		return getDoc(doc(
 
-			doc(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}/${key}`),{
+			collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
+			key
 
-				idField: this.collectionIDField as keyof Contact
-
-			}
-
-		) as Observable<Contact>;
+		)).then((snapshot) => snapshot.data()) as Promise<Contact | undefined>;
 
 	}
 
@@ -92,7 +89,11 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 		try{
 
-			await updateDoc(doc(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}/${key}`), entity);
+			await updateDoc(doc(
+
+				this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}/${key}`
+
+			), entity);
 
 			return true;
 

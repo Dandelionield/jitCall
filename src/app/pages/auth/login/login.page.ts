@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { SwalService } from '@shared/services/swal/swal.service';
+import { LoadingService } from '@shared/services/loading/loading.service';
 import { Credential } from '@models/credential.model';
 
 @Component({
@@ -26,6 +27,7 @@ import { Credential } from '@models/credential.model';
 		private fb: FormBuilder,
 		private authService: AuthService,
 		private swalService: SwalService,
+		private loadingService: LoadingService,
 		private router: Router
 
 	) {}
@@ -33,6 +35,8 @@ import { Credential } from '@models/credential.model';
 	public ngOnInit(): void {}
 
 	public onSubmit(): void {
+
+		this.loadingService.show();
 
 		try{
 
@@ -59,7 +63,7 @@ import { Credential } from '@models/credential.model';
 
 			};
 
-			/*this.authService.login(cred).then((token: string) => {
+			this.authService.login(cred).then((token: string) => {
 
 				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
@@ -68,13 +72,15 @@ import { Credential } from '@models/credential.model';
 
 				this.swalService.showException('Error', e.message);
 
-			});/**/
+			});
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
 		}
+
+		this.loadingService.hide();
 
 	}
 
