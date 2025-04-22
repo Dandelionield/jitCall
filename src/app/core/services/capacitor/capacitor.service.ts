@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { PushNotifications } from '@capacitor/push-notifications';
+import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
+import { Capacitor } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable} from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@entities/user.entity';
 
 @Injectable({
@@ -10,14 +11,62 @@ import { User } from '@entities/user.entity';
 
 }) export class CapacitorService {
 
+	private _notificationRecieved: BehaviorSubject<PushNotificationSchema | null> = new BehaviorSubject<PushNotificationSchema | null>(null);
+	public notificationRecieved$: Observable<PushNotificationSchema | null> = this._notificationRecieved.asObservable();
+
 	public fcmToken: string | null = null;
 
 	public constructor(private http: HttpClient) {}
 
-	public async init(): Promise<void> {
+	public async init(): Promise<string | null> {
 
-		await this.requestPermissions();
-		await this.registerListeners();
+		if (Capacitor.getPlatform() !== 'web'){
+
+			await this.requestPermissions();
+			return await this.addListeners();
+
+		}
+
+		return null;
+
+	}
+
+	private async requestPermissions(): Promise<void> {
+
+		const { receive } = await PushNotifications.requestPermissions();
+
+		if (receive === 'granted') {
+
+			await PushNotifications.register();
+
+		}
+
+	}
+
+	private async addListeners(): Promise<string | null> {
+
+		return new Promise((resolve, reject) => {
+
+			PushNotifications.addListener('registration', (token: Token) => {
+
+				this.fcmToken = token.value;
+				resolve(token.value);
+
+			});
+
+			PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+
+				this._notificationRecieved.next(notification);
+
+			});
+
+			PushNotifications.addListener('pushNotificationActionPerformed', (action: ActionPerformed) => {
+
+				
+
+			});
+
+		});
 
 	}
 
@@ -57,39 +106,6 @@ import { User } from '@entities/user.entity';
 
 		});
 
-	}
-
-	private async requestPermissions(): Promise<void> {
-
-		const { receive } = await PushNotifications.requestPermissions();
-
-		if (receive === 'granted') {
-
-			await PushNotifications.register();
-
-		}
-
-	}
-
-	private async registerListeners() {
-
-		PushNotifications.addListener('registration', (token) => {
-
-			this.fcmToken = token.value;
-
-		});
-
-		PushNotifications.addListener('pushNotificationReceived', (notification) => {
-
-			
-
-		});
-
-		PushNotifications.addListener('pushNotificationActionPerformed', (action) => {
-
-			
-
-		});
 	}
 
 	public async getToken(): Promise<string | null> {

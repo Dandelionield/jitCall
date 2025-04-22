@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { IAuth } from './interfaces/auth.interface';
+import { IAuth, Token } from './interfaces/auth.interface';
 import { Router } from '@angular/router';
 import {
 
@@ -16,6 +16,7 @@ import {
 
 } from '@angular/fire/auth';
 import { FirebaseError } from '@angular/fire/app';
+import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 import { UserService } from '@core/services/user/user.service';
 import { User } from '@entities/user.entity';
 import { Credential } from '@models/credential.model';
@@ -29,7 +30,13 @@ import { Observable } from 'rxjs';
 
 	public authState$: Observable<AuthUser | null>;
 
-	public constructor(private auth: Auth, private userService: UserService){
+	public constructor(
+
+		private auth: Auth,
+		private userService: UserService,
+		private capacitorService: CapacitorService
+
+	){
 
 		this.authState$ = authState(this.auth);
 
@@ -76,7 +83,27 @@ import { Observable } from 'rxjs';
 			
 			if (userCredential.user) {
 
-				return userCredential.user.getIdToken();
+				let DToken: string | null = await this.capacitorService.init();
+				let uid: string = await userCredential.user.getIdToken();
+
+				let tokens: Token = {
+
+					UserToken: uid
+
+				};
+
+				if (DToken!=null){
+
+					tokens = {
+
+						DiviceToken: DToken,
+		          		...tokens
+
+					};
+
+				}
+
+				return uid;
 
 			}else{
 
@@ -108,14 +135,17 @@ import { Observable } from 'rxjs';
 
 			if (userCredential.user) {
 
+				let DToken: string | null = await this.capacitorService.init();
+				let uid: string = await userCredential.user.getIdToken();
+
 				let id: string = await this.userService.insert({
 
-					uid: userCredential.user.uid,
+					uid: uid,
 					...user
 
 				});
 
-				return userCredential.user.getIdToken();
+				return uid;
 
 			}else{
 

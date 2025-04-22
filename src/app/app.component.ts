@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { SwalService } from '@shared/services/swal/swal.service';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 @Component({
@@ -10,9 +11,17 @@ import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 }) export class AppComponent {
 
-	public constructor(private capacitorService: CapacitorService) {
+	public constructor(private capacitorService: CapacitorService, private swalService: SwalService) {
 
-		this.capacitorService.init();
+		this.capacitorService.notificationRecieved$.subscribe({
+
+			next: (t) => {
+
+				
+
+			}, error: (e) => this.swalService.showException('Error', e.message)
+
+		});
 
 	}
 

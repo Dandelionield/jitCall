@@ -21,7 +21,14 @@ import { Credential } from '@models/credential.model';
 
 	});
 
-	public constructor(private fb: FormBuilder, private authService: AuthService, private swalService: SwalService, private router: Router) {}
+	public constructor(
+
+		private fb: FormBuilder,
+		private authService: AuthService,
+		private swalService: SwalService,
+		private router: Router
+
+	) {}
 
 	public ngOnInit(): void {}
 
@@ -52,7 +59,7 @@ import { Credential } from '@models/credential.model';
 
 			};
 
-			this.authService.login(cred).then((token: string) => {
+			/*this.authService.login(cred).then((token: string) => {
 
 				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
@@ -61,7 +68,7 @@ import { Credential } from '@models/credential.model';
 
 				this.swalService.showException('Error', e.message);
 
-			});
+			});/**/
 
 		}catch (e: any){
 

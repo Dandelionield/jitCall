@@ -60,6 +60,7 @@ import { User } from '@entities/user.entity';
 				}else{
 
 					this.swalService.showException('Error', `${this.contact.name} ${this.contact.surname} is not logged up on jitCall.`)
+					this.callService.hangUp();
 
 				}
 

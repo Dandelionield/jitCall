@@ -4,6 +4,7 @@ export interface User{
 
 	id?: string,
 	uid?: string,
+	token?: string,
 	name: string,
 	surname: string,
 	contact: string,
