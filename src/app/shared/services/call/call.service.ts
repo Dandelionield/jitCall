@@ -25,7 +25,7 @@ import { UserService } from '@core/services/user/user.service';
 
 		if (id){
 
-			let u: User | undefined = await this.userService.findOne(id);
+			//let u: User | undefined = await this.userService.findOne(id);
 
 			
 
