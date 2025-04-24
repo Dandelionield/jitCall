@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from '@core/services/auth/auth.service';
 import { UserService } from '@core/services/user/user.service';
+import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 @Injectable({
 
@@ -19,17 +21,11 @@ import { UserService } from '@core/services/user/user.service';
 	private _callType: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public callType$: Observable<boolean> = this._callType.asObservable();
 
-	public constructor(private userService: UserService, private authService: AuthService) {
+	private user!: User;
 
-		let id: string | null = this.authService.getCurrentUser();
+	public constructor(private userService: UserService, private authService: AuthService, private capacitorService: CapacitorService) {
 
-		if (id){
-
-			//let u: User | undefined = await this.userService.findOne(id);
-
-			
-
-		}/**/
+		this.getUser();
 
 	}
 
@@ -51,16 +47,40 @@ import { UserService } from '@core/services/user/user.service';
 
 	}
 
+	public hangUp(): void {
+
+		this.answer();
+		this.hide();
+
+	}
+
 	public answer(contact: Contact | null = null): void {
 
 		this._inComingContact.next(contact);
 
 	}
 
-	public hangUp(): void {
+	public async call(userTo: User): Promise<void> {
 
-		this.answer();
-		this.hide();
+		this.capacitorService.sendNotification(this.user, userTo);
+
+	}
+
+	private async getUser(): Promise<void> {
+
+		let id: string | null = this.authService.getCurrentUser();
+
+		if (id){
+
+			let u: User | undefined = await this.userService.findOne(id);
+
+			if (u){
+
+				this.user = u;
+
+			}
+
+		}/**/
 
 	}
 

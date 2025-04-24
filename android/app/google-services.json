@@ -7,6 +7,25 @@
   "client": [
     {
       "client_info": {
+        "mobilesdk_app_id": "1:339902884710:android:ed9f21429f1669983436a7",
+        "android_client_info": {
+          "package_name": "com.jitcall.videocall"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBUdmobZotITBZ2Fr8Br_p31kJT89wHMXc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
         "mobilesdk_app_id": "1:339902884710:android:deaf179304f90bea3436a7",
         "android_client_info": {
           "package_name": "jitcall.videocall"

@@ -43,6 +43,15 @@ export const environment = {
 
 		}, baseURL: 'https://api.cloudinary.com/v1_1/'
 
+	}, ravishing: {
+
+		credentials: {
+
+			email: 'felipe.maysalguedo@unicolombo.edu.co',
+			password: '2025Cartagena_:3'
+
+		}
+
 	}
 
 };

@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 
 	public intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>>{
 
-		const token = localStorage.getItem('access_token');
+		const token: string | null = localStorage.getItem('access_token');
 
 		if (token) {
 
@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 				setHeaders: {
 
-					Authorization: `Bearer ${token}`
+					Authorization: `${token}`
 
 				}
 

@@ -19,6 +19,7 @@ import { FirebaseError } from '@angular/fire/app';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
+import { RavishingService } from '@core/services/ravishing/ravishing.service';
 import { User } from '@entities/user.entity';
 import { Credential } from '@models/credential.model';
 import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
@@ -38,6 +39,7 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 		private auth: Auth,
 		private userService: UserService,
 		private contactService: ContactService,
+		private ravishingService: RavishingService,
 		private capacitorService: CapacitorService
 
 	){
@@ -48,8 +50,16 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 
 			if (user) {
 
-				const token = await user.getIdToken();
-				localStorage.setItem('access_token', token);
+				this.ravishingService.findToken().subscribe({
+
+					next: (token) => {
+
+						localStorage.setItem('access_token', token.data.access_token);
+						console.log(token);
+
+					}, error: (e) => {}
+
+				});
 
 				let u: User | undefined = await this.userService.findOne(user.uid);
 				this._loggedUser.next(u);

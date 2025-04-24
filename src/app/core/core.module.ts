@@ -16,6 +16,7 @@ import { UserService } from './services/user/user.service';
 import { ContactService } from './services/contact/contact.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './guards/auth/auth.guard';
+import { RavishingService } from './services/ravishing/ravishing.service';
 import { CapacitorService } from './services/capacitor/capacitor.service';
 
 @NgModule({

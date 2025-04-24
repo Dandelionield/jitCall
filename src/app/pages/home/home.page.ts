@@ -7,6 +7,7 @@ import { User } from '@entities/user.entity';
 import { Router } from '@angular/router';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { SwalService } from '@shared/services/swal/swal.service';
+import { Subscription } from 'rxjs';
 
 @Component({
 
@@ -19,6 +20,7 @@ import { SwalService } from '@shared/services/swal/swal.service';
 
 	public contacts!: Array<Contact>;
 	public searchText: string = "";
+	private contactsSub: Subscription | undefined = undefined;
 
 	public constructor(
 
@@ -48,11 +50,19 @@ import { SwalService } from '@shared/services/swal/swal.service';
 
 	}
 
-	public ngOnDestroy(): void {}
+	public ngOnDestroy(): void {
+
+		if (this.contactsSub){
+
+			this.contactsSub.unsubscribe();
+
+		}
+
+	}
 
 	public findAll(): void {
 
-		this.contactService.findAll().subscribe({
+		this.contactsSub = this.contactService.findAll().subscribe({
 
 			next: (t) => {
 

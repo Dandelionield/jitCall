@@ -4,6 +4,7 @@ import { Capacitor } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@entities/user.entity';
+import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
 
@@ -70,11 +71,11 @@ import { User } from '@entities/user.entity';
 
 	}
 
-	public sendNotification(token: string, userFrom: User, userTo: User, meetingId: string): Observable<any> {
+	public sendNotification(userFrom: User, userTo: User): Observable<any> | null {
 
-		const payload = {
+		return this.fcmToken ? this.http.post('https://ravishing-courtesy-production.up.railway.app/notifications', {
 
-			token: token,
+			token: userTo.token as string,
 			notification: {
 
 				title: 'Incoming call',
@@ -86,7 +87,7 @@ import { User } from '@entities/user.entity';
 				data: {
 
 					userId: userTo.id,
-					meetingId: meetingId,
+					meetingId: uuidv4(),
 					type: 'incoming_call',
 					name: userTo.name,
 					userFrom: userFrom.id,
@@ -95,9 +96,7 @@ import { User } from '@entities/user.entity';
 
 			}
 
-		};
-
-		return this.http.post('https://ravishing-courtesy-production.up.railway.app/notifications', payload, {
+		}, {
 
 			headers: new HttpHeaders({
 
@@ -105,7 +104,7 @@ import { User } from '@entities/user.entity';
 
 			})
 
-		});
+		}) : null;
 
 	}
 
