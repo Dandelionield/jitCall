@@ -16,7 +16,7 @@ import { Observable } from 'rxjs';
 
 				setHeaders: {
 
-					Authorization: `${token}`
+					Authorization: `Bearer ${token}`
 
 				}
 

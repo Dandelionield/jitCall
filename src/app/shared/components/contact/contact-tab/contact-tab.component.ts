@@ -6,6 +6,7 @@ import { SwalService } from '@shared/services/swal/swal.service';
 import { Subscription, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
+import { isRavishing } from '@models/ravishing.model';
 
 @Component({
 
@@ -22,8 +23,9 @@ import { User } from '@entities/user.entity';
 
 	}) public contact!: Contact;
 
-	public user: Subscription | undefined = undefined;
 	public isCalling$: Observable<boolean> = this.callService.isCalling$;
+	private userSub: Subscription | undefined = undefined;
+	private callSub: Subscription | undefined = undefined;
 
 	public constructor(
 
@@ -40,10 +42,21 @@ import { User } from '@entities/user.entity';
 
 			next: (t) => {
 
-				if (this.user!=undefined && !t){
+				if (!t){
 
-					this.user.unsubscribe();
-					this.user = undefined;
+					if (this.userSub){
+
+						this.userSub.unsubscribe();
+						this.userSub = undefined;
+
+					}
+
+					if (this.callSub){
+
+						this.callSub.unsubscribe();
+						this.callSub = undefined;
+
+					}
 
 				}
 
@@ -55,7 +68,7 @@ import { User } from '@entities/user.entity';
 
 	public call(callType: boolean = false): void {
 
-		this.user = this.userService.findOneByContact(this.contact).subscribe({
+		this.userSub = this.userService.findOneByContact(this.contact).subscribe({
 
 			next: async (t) => {
 
@@ -65,11 +78,23 @@ import { User } from '@entities/user.entity';
 					this.callService.answer(this.contact);
 					this.callService.show();
 
-					this.callService.call(t);
+					this.callSub = this.callService.call(t).subscribe({
+
+						next: (t) => {
+
+							if (!isRavishing(t)){
+
+								this.swalService.showException('Error', t.msg);
+
+							}
+
+						}, error: (e) => this.swalService.showException('Error', e.message)
+
+					});
 
 				}else{
 
-					this.swalService.showException('Error', `${this.contact.name} ${this.contact.surname} is not logged up on jitCall.`)
+					this.swalService.showException('Error', `${this.contact.name} ${this.contact.surname} is not logged up on jitCall.`);
 					this.callService.hangUp();
 
 				}

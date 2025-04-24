@@ -30,22 +30,29 @@ export const environment = {
 
 	}, cloudinary: {
 
-		credentials: {
+		baseURL: 'https://api.cloudinary.com/v1_1/',
+		endpoints: {
+
+			img: '/resources/image/upload'
+
+		}, credentials: {
 
 			cloud_name: 'dir7hha9x', 
 			api_key: '491513494693695', 
 			api_secret: 'n2b5YdbqCxrtNlRaOIOM7uZR43s',
 			secure: true
 
-		}, endpoints: {
-
-			img: '/resources/image/upload'
-
-		}, baseURL: 'https://api.cloudinary.com/v1_1/'
+		}
 
 	}, ravishing: {
 
-		credentials: {
+		baseURL: 'https://ravishing-courtesy-production.up.railway.app',
+		endpoints: {
+
+			login: 'user/login',
+			notification: 'notifications'
+
+		}, credentials: {
 
 			email: 'felipe.maysalguedo@unicolombo.edu.co',
 			password: '2025Cartagena_:3'

@@ -82,7 +82,6 @@ import { User } from '@entities/user.entity';
 
 			this.authService.logup(cred, user).then((token: string) => {
 
-				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
 
 			}).catch((e: any) => {

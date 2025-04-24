@@ -1,8 +1,10 @@
 import { Observable } from 'rxjs';
-import { Ravishing } from '@models/ravishing.api.response';
+import { RavishingToken } from '@models/ravishing.model';
+import { Error } from '@models/error.model';
+import { Credential } from '@models/credential.model';
 
-export interface IRavishingQuery<R extends Ravishing>{
+export interface IRavishingQuery<T extends RavishingToken, C extends Credential, E extends Error>{
 
-	findToken(): Observable<R>;
+	findToken(cred: C): Observable<T | E>;
 
 }

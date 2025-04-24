@@ -22,6 +22,8 @@ import { ContactService } from '@core/services/contact/contact.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
 import { User } from '@entities/user.entity';
 import { Credential } from '@models/credential.model';
+import { RavishingToken, isRavishingToken } from '@models/ravishing.model';
+import { Error } from '@models/error.model';
 import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 
 @Injectable({
@@ -33,6 +35,8 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 	private _loggedUser: BehaviorSubject<User | undefined> = new BehaviorSubject<User | undefined>(undefined);
 	public loggedUser$: Observable<User | undefined> = this._loggedUser.asObservable();
 	public authState$: Observable<AuthUser | null>;
+
+	private token!: string;
 
 	public constructor(
 
@@ -52,10 +56,22 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 
 				this.ravishingService.findToken().subscribe({
 
-					next: (token) => {
+					next: (ravishing) => {
 
-						localStorage.setItem('access_token', token.data.access_token);
-						console.log(token);
+						if (isRavishingToken(ravishing)){
+
+							const token: string = ravishing.data.access_token.replace("Bearer ", "");
+
+							this.token = token;
+
+							localStorage.setItem('access_token', token);
+							console.log(token);
+
+						}else{
+
+							localStorage.setItem('access_token', '')
+
+						}
 
 					}, error: (e) => {}
 
@@ -67,11 +83,14 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 			}else{
 
 				localStorage.removeItem('access_token');
+
 			}
 
 		});
 
 	}
+
+
 
 	public getCurrentUser(): string | null{
 
@@ -85,9 +104,11 @@ import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
 
 	}
 
-	public async getCurrentToken(): Promise<string | null> {
+	public getCurrentToken(): string {
 
-		return await this.auth.currentUser?.getIdToken() || null;
+		return this.token as string;
+
+		//return await this.auth.currentUser?.getIdToken() || null;
 
 	}
 

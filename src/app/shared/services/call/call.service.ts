@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
 import { User } from '@entities/user.entity';
+import { Ravishing } from '@models/ravishing.model';
+import { Error } from '@models/error.model';
 import { AuthService } from '@core/services/auth/auth.service';
 import { UserService } from '@core/services/user/user.service';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
@@ -60,9 +62,9 @@ import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 	}
 
-	public async call(userTo: User): Promise<void> {
+	public call(userTo: User): Observable<Ravishing | Error> {
 
-		this.capacitorService.sendNotification(this.user, userTo);
+		return this.capacitorService.sendNotification(this.user, userTo);
 
 	}
 

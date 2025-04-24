@@ -65,7 +65,6 @@ import { Credential } from '@models/credential.model';
 
 			this.authService.login(cred).then((token: string) => {
 
-				localStorage.setItem('access_token', token);
 				this.router.navigate(['/home']);
 
 			}).catch((e: any) => {

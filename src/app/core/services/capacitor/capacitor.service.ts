@@ -4,6 +4,13 @@ import { Capacitor } from '@capacitor/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@entities/user.entity';
+import { RavishingService } from '@core/services/ravishing/ravishing.service';
+import { Ravishing } from '@models/ravishing.model';
+import { Notification } from '@models/notification.model';
+import { Data } from '@models/data.model';
+import { Android } from '@models/android.model';
+import { Playload } from '@models/playload.model';
+import { Error } from '@models/error.model';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -17,7 +24,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 	public fcmToken: string | null = null;
 
-	public constructor(private http: HttpClient) {}
+	public constructor(private http: HttpClient, private ravishingService: RavishingService) {}
 
 	public async init(): Promise<string | undefined> {
 
@@ -71,40 +78,41 @@ import { v4 as uuidv4 } from 'uuid';
 
 	}
 
-	public sendNotification(userFrom: User, userTo: User): Observable<any> | null {
+	public sendNotification(userFrom: User, userTo: User): Observable<Ravishing | Error> {
 
-		return this.fcmToken ? this.http.post('https://ravishing-courtesy-production.up.railway.app/notifications', {
+		const notification: Notification = {
 
-			token: userTo.token as string,
-			notification: {
+			title: 'Incoming call',
+			body: `${userFrom.name} ${userFrom.surname} is calling you.`
 
-				title: 'Incoming call',
-				body: `${userFrom.name} ${userFrom.surname} is calling you.`,
+		}
 
-			}, android: {
+		const data: Data = {
 
-				priority: 'high',
-				data: {
+			userId: userTo.id,
+			meetingId: uuidv4(),
+			type: 'incoming_call',
+			name: userTo.name,
+			userFrom: userFrom.id,
 
-					userId: userTo.id,
-					meetingId: uuidv4(),
-					type: 'incoming_call',
-					name: userTo.name,
-					userFrom: userFrom.id,
+		};
 
-				}
+		const android: Android = {
 
-			}
+			priority: 'high',
+			data: data
 
-		}, {
+		};
 
-			headers: new HttpHeaders({
+		const playload: Playload = {
 
-				'Content-Type': 'application/json',
+			token: userTo.token,
+			notification: notification,
+			android: android
 
-			})
+		};
 
-		}) : null;
+		return this.ravishingService.send(playload);
 
 	}
 

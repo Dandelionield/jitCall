@@ -1,8 +1,11 @@
 import { Injectable } from '@angular/core';
 import { IRavishingQuery } from './interfaces/ravishing.query.interface';
-import { Ravishing } from '@models/ravishing.api.response';
+import { IRavishingStatement } from './interfaces/ravishing.statement.interface';
+import { Ravishing, RavishingToken } from '@models/ravishing.model';
 import { Credential } from '@models/credential.model';
-import { HttpClient } from '@angular/common/http';
+import { Playload } from '@models/playload.model';
+import { Error } from '@models/error.model';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
 
@@ -10,15 +13,36 @@ import { Observable } from 'rxjs';
 
 	providedIn: 'root'
 
-}) export class RavishingService implements IRavishingQuery<Ravishing>{
+}) export class RavishingService implements IRavishingQuery<RavishingToken, Credential, Error>, IRavishingStatement<Ravishing, Playload, Error>{
 
 	private readonly credential: Credential = environment.ravishing.credentials;
+	private readonly baseURL: string = environment.ravishing.baseURL;
+	private readonly endpoints = {
+
+		login: environment.ravishing.endpoints.login,
+		notification: environment.ravishing.endpoints.notification
+
+	};
 
 	public constructor(private http: HttpClient) {}
 
-	public findToken(): Observable<Ravishing>{
+	public findToken(cred: Credential = this.credential): Observable<RavishingToken | Error>{
 
-		return this.http.post<Ravishing>('https://ravishing-courtesy-production.up.railway.app/user/login', this.credential);
+		return this.http.post<RavishingToken | Error>(`${this.baseURL}/${this.endpoints['login']}`, cred);
+
+	}
+
+	public send(load: Playload): Observable<Ravishing | Error>{
+
+		return this.http.post<Ravishing | Error>(`${this.baseURL}/${this.endpoints['notification']}`, load, {
+
+			headers: new HttpHeaders({
+
+				'Content-Type': 'application/json',
+
+			})
+
+		});
 
 	}
 
