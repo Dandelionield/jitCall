@@ -1,13 +1,12 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IContactQuery } from './interfaces/contact.query.interface';
 import { Contact } from '@entities/contact.entity';
-import { User } from '@entities/user.entity';
 import { environment } from '@environment/environment';
-import { map, switchMap, catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of, from, throwError, combineLatest } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, getDocs, getDoc, query, where, DocumentReference } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, query } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -20,7 +19,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 	private readonly collectionIDField: string = environment.firebase.collections.contact.idField;
 	private superKey!: string;
 
-	public constructor(private firestore: Firestore, private injector: Injector) {}
+	public constructor(private firestore: Firestore) {}
 
 	public setSuperKey(superKey: string): void{
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@entities/user.entity';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
@@ -24,7 +23,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 	public fcmToken: string | null = null;
 
-	public constructor(private http: HttpClient, private ravishingService: RavishingService) {}
+	public constructor(private ravishingService: RavishingService) {}
 
 	public async init(): Promise<string | undefined> {
 

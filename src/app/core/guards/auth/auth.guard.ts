@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { RavishingService } from '@core/services/ravishing/ravishing.service';
-import { take, map, switchMap, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+import { take, switchMap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 @Injectable({
 	
@@ -11,7 +10,7 @@ import { Observable, of } from 'rxjs';
 
 }) export class AuthGuard implements CanActivate{
 
-	public constructor(private authService: AuthService, private ravishingService: RavishingService, private router: Router) {}
+	public constructor(private authService: AuthService, private router: Router) {}
 
 	public canActivate(): Observable<boolean> {
 
@@ -27,7 +26,7 @@ import { Observable, of } from 'rxjs';
 
 				}
 
-				const currentToken = await this.authService.getCurrentToken();
+				const currentToken = this.authService.getCurrentToken();
 				const storedToken = localStorage.getItem('access_token');
 
 				//console.log(`currentToken !== storedToken: ${currentToken !== storedToken} because ${currentToken} es diferente a ${storedToken}`);

@@ -1,13 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContactService } from '@core/services/contact/contact.service';
-import { UserService } from '@core/services/user/user.service';
-import { LoadingService } from '@shared/services/loading/loading.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { Router } from '@angular/router';
-import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@entities/contact.entity';
-import { User } from '@entities/user.entity';
 
 @Component({
 
@@ -32,10 +28,7 @@ import { User } from '@entities/user.entity';
 
 		private fb: FormBuilder,
 		private contactService: ContactService,
-		private userService: UserService,
-		private authService: AuthService,
 		private swalService: SwalService,
-		private loadingService: LoadingService,
 		private router: Router
 
 	) {}

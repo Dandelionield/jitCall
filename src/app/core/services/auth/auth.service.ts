@@ -1,6 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { IAuth, Token } from './interfaces/auth.interface';
-import { Router } from '@angular/router';
+import { IAuth } from './interfaces/auth.interface';
 import {
 
 	Auth,
@@ -22,9 +21,8 @@ import { ContactService } from '@core/services/contact/contact.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
 import { User } from '@entities/user.entity';
 import { Credential } from '@models/credential.model';
-import { RavishingToken, isRavishingToken } from '@models/ravishing.model';
-import { Error } from '@models/error.model';
-import { BehaviorSubject, Observable, lastValueFrom } from 'rxjs';
+import { isRavishingToken } from '@models/ravishing.model';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
 

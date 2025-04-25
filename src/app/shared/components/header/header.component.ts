@@ -2,7 +2,6 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { UserService } from '@core/services/user/user.service';
 import { User } from '@entities/user.entity';
 
 @Component({
@@ -23,7 +22,6 @@ import { User } from '@entities/user.entity';
 
 	public constructor(
 
-		private userService: UserService,
 		private authService: AuthService,
 		private router: Router,
 		private location: Location

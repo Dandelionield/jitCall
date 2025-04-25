@@ -1,11 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { CallService } from '@shared/services/call/call.service';
-import { AuthService } from '@core/services/auth/auth.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { Subscription, Observable } from 'rxjs';
 import { Contact } from '@entities/contact.entity';
-import { User } from '@entities/user.entity';
 import { isRavishing } from '@models/ravishing.model';
 
 @Component({
@@ -31,8 +29,7 @@ import { isRavishing } from '@models/ravishing.model';
 
 		private callService: CallService,
 		private swalService: SwalService,
-		private userService: UserService,
-		private authService: AuthService
+		private userService: UserService
 
 	) {}
 

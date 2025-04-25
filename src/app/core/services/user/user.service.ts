@@ -6,9 +6,9 @@ import { User } from '@entities/user.entity';
 import { Contact } from '@entities/contact.entity';
 import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
-import { forkJoin, Observable, of, from, throwError, combineLatest } from 'rxjs';
+import { Observable, of } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, getDocs, query, where, limit } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
