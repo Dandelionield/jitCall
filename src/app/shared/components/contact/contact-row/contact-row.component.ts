@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Contact } from '@entities/contact.entity';
 import { Router } from '@angular/router';
+import { ContactTabService } from '@shared/services/contact-tab/contact-tab.service';
 
 @Component({
 
@@ -19,7 +20,35 @@ import { Router } from '@angular/router';
 
 	public isExpanded = false;
 
-	public constructor(private router: Router) {}
+	public constructor(private router: Router, private contactTabService: ContactTabService) {
+
+		this.contactTabService.isTabbed$.subscribe({
+
+			next: (id) => {
+
+				if (id && this.contact && this.contact.id){
+
+					if (id!==this.contact.id){
+
+						this.isExpanded = false;
+
+					}
+
+				}else{
+
+					this.isExpanded = false;
+
+				}
+
+			}, error: (e) => {
+
+				
+
+			}
+
+		});
+
+	}
 
 	public ngOnInit(): void {}
 
@@ -34,6 +63,8 @@ import { Router } from '@angular/router';
 
 		event.stopPropagation();
 		this.isExpanded = !this.isExpanded;
+
+		this.contactTabService.setTabbed(this.isExpanded ? this.contact.id : undefined);
 
 	}
 

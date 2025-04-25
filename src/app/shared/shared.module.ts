@@ -16,6 +16,7 @@ import { CallComponent } from './components/call/call.component';
 import { LoadingService } from './services/loading/loading.service';
 import { CallService } from './services/call/call.service';
 import { SwalService } from './services/swal/swal.service';
+import { ContactTabService } from './services/contact-tab/contact-tab.service';
 
 @NgModule({
 
@@ -54,7 +55,8 @@ import { SwalService } from './services/swal/swal.service';
 
 		LoadingService,
 		SwalService,
-		CallService
+		CallService,
+		ContactTabService
 
 	]
 
