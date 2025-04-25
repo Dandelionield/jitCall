@@ -21,13 +21,13 @@ export interface RavishingToken{
 
 }
 
-export function isRavishingToken(t: RavishingToken | Error){
+export function isRavishingToken(t: RavishingToken | Error): t is RavishingToken{
 
 	return t && 'data' in t;
 
 }
 
-export function isRavishing(t: Ravishing | Error){
+export function isRavishing(t: Ravishing | Error): t is Ravishing{
 
 	return t && '_id' in t;
 

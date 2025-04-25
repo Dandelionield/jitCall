@@ -75,9 +75,18 @@ import { isRavishing } from '@models/ravishing.model';
 					this.callService.answer(this.contact);
 					this.callService.show();
 
+					if (this.callSub){
+
+						this.callSub.unsubscribe();
+						this.callSub = undefined;
+
+					}
+
 					this.callSub = this.callService.call(t).subscribe({
 
 						next: (t) => {
+
+							console.log(t);
 
 							if (!isRavishing(t)){
 

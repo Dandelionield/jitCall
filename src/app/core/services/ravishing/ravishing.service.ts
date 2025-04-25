@@ -5,9 +5,10 @@ import { Ravishing, RavishingToken } from '@models/ravishing.model';
 import { Credential } from '@models/credential.model';
 import { Playload } from '@models/playload.model';
 import { Error } from '@models/error.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
 
@@ -34,7 +35,7 @@ import { Observable } from 'rxjs';
 
 	public send(load: Playload): Observable<Ravishing | Error>{
 
-		return this.http.post<Ravishing | Error>(`${this.baseURL}/${this.endpoints['notification']}`, load, {
+		return this.http.post<{notification: Ravishing}>(`${this.baseURL}/${this.endpoints['notification']}`, load, {
 
 			headers: new HttpHeaders({
 
@@ -42,7 +43,21 @@ import { Observable } from 'rxjs';
 
 			})
 
-		});
+		}).pipe(
+
+			map((response: {notification: Ravishing}) => {
+
+				const notification = response.notification;
+
+				return {
+
+					...notification
+
+				} as Ravishing;
+
+			})
+
+		);
 
 	}
 
