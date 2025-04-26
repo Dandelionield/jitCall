@@ -62,7 +62,7 @@ import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 
 	}
 
-	public call(userTo: User): Observable<Ravishing | Error> {
+	public async call(userTo: User): Promise<Observable<Ravishing | Error>> {
 
 		return this.capacitorService.sendNotification(this.user, userTo);
 

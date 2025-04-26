@@ -3,6 +3,7 @@ import { UserService } from '@core/services/user/user.service';
 import { CallService } from '@shared/services/call/call.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { Subscription, Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Contact } from '@entities/contact.entity';
 import { isRavishing } from '@models/ravishing.model';
 
@@ -65,7 +66,7 @@ import { isRavishing } from '@models/ravishing.model';
 
 	public call(callType: boolean = false): void {
 
-		this.userSub = this.userService.findOneByContact(this.contact).subscribe({
+		this.userSub = this.userService.findOneByContact(this.contact).pipe(take(1)).subscribe({
 
 			next: async (t) => {
 
@@ -75,14 +76,7 @@ import { isRavishing } from '@models/ravishing.model';
 					this.callService.answer(this.contact);
 					this.callService.show();
 
-					if (this.callSub){
-
-						this.callSub.unsubscribe();
-						this.callSub = undefined;
-
-					}
-
-					this.callSub = this.callService.call(t).subscribe({
+					this.callSub = (await this.callService.call(t)).subscribe({
 
 						next: (t) => {
 

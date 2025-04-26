@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IContactQuery } from './interfaces/contact.query.interface';
 import { Contact } from '@entities/contact.entity';
+import { User } from '@entities/user.entity';
 import { environment } from '@environment/environment';
 import { map } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, query } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -58,6 +59,29 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 			))
 
 		);
+
+	}
+
+	public findOneByContactWithSuperKey<User>(superKey: string, contact: string): Promise<Contact | undefined>{
+
+		return getDocs(query(
+
+			collection(this.firestore, `${this.superCollectionName}/${superKey}/${this.collectionName}`),
+			where('contact', '==', contact),
+			limit(1)
+
+		)).then((snapshot) => {
+
+			if (snapshot.empty) return undefined;
+
+			return {
+
+				id: snapshot.docs[0].id, 
+				...snapshot.docs[0].data()
+
+			} as Contact;
+
+		}) as Promise<Contact | undefined>;
 
 	}
 

@@ -3,6 +3,8 @@ import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } fro
 import { Capacitor } from '@capacitor/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { User } from '@entities/user.entity';
+import { Contact } from '@entities/contact.entity';
+import { ContactService } from '@core/services/contact/contact.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
 import { Ravishing } from '@models/ravishing.model';
 import { Notification } from '@models/notification.model';
@@ -23,7 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 	public fcmToken: string | null = null;
 
-	public constructor(private ravishingService: RavishingService) {}
+	public constructor(private ravishingService: RavishingService, private contactService: ContactService) {}
 
 	public async init(): Promise<string | undefined> {
 
@@ -77,12 +79,16 @@ import { v4 as uuidv4 } from 'uuid';
 
 	}
 
-	public sendNotification(userFrom: User, userTo: User): Observable<Ravishing | Error> {
+	public async sendNotification(userFrom: User, userTo: User): Promise<Observable<Ravishing | Error>> {
+
+		/*const contact: Contact | undefined = undefined;//await this.contactService.findOneByContactWithSuperKey(userTo.id as string, userFrom.contact);
+
+		const contactFrom: User | Contact = contact ? contact : userFrom;
 
 		const notification: Notification = {
 
 			title: 'Incoming call',
-			body: `${userFrom.name} ${userFrom.surname} is calling you.`
+			body: `${contactFrom.name} ${contactFrom.surname} is calling you.`
 
 		}
 
@@ -111,7 +117,47 @@ import { v4 as uuidv4 } from 'uuid';
 
 		};
 
-		return this.ravishingService.send(playload);
+		return this.ravishingService.send(playload);/**/
+
+		return this.contactService.findOneByContactWithSuperKey(userTo.id as string, userFrom.contact).then(contact => {
+
+			const contactFrom: User | Contact = contact ? contact : userFrom;
+
+			const notification: Notification = {
+
+				title: 'Incoming call',
+				body: `${contactFrom.name} ${contactFrom.surname} is calling you.`
+
+			}
+
+			const data: Data = {
+
+				userId: userTo.id,
+				meetingId: uuidv4(),
+				type: 'incoming_call',
+				name: userTo.name,
+				userFrom: userFrom.id,
+
+			};
+
+			const android: Android = {
+
+				priority: 'high',
+				data: data
+
+			};
+
+			const playload: Playload = {
+
+				token: userTo.token,
+				notification: notification,
+				android: android
+
+			};
+
+			return this.ravishingService.send(playload);
+
+		});
 
 	}
 

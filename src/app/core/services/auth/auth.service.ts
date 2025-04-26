@@ -63,7 +63,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 							this.token = token;
 
 							localStorage.setItem('access_token', token);
-							console.log(token);
+							//console.log(token);
 
 						}else{
 

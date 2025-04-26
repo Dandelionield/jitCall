@@ -8,7 +8,7 @@ import { Error } from '@models/error.model';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { environment } from '@environment/environment';
 import { Observable } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, take } from 'rxjs/operators';
 
 @Injectable({
 
@@ -45,7 +45,7 @@ import { map, catchError } from 'rxjs/operators';
 
 		}).pipe(
 
-			map((response: {notification: Ravishing}) => {
+			take(1), map((response: {notification: Ravishing}) => {
 
 				const notification = response.notification;
 
