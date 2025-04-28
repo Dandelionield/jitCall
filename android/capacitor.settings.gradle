@@ -16,3 +16,6 @@ project(':capacitor-push-notifications').projectDir = new File('../node_modules/
 
 include ':capacitor-status-bar'
 project(':capacitor-status-bar').projectDir = new File('../node_modules/@capacitor/status-bar/android')
+
+include ':capacitor-jit-call-plugin'
+project(':capacitor-jit-call-plugin').projectDir = new File('../../jit-call/android')

@@ -12,6 +12,7 @@ import { Data } from '@models/data.model';
 import { Android } from '@models/android.model';
 import { Playload } from '@models/playload.model';
 import { Error } from '@models/error.model';
+import { JitCall as JitCallPlugin } from 'capacitor-jit-call-plugin/src';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -32,7 +33,13 @@ import { v4 as uuidv4 } from 'uuid';
 		if (Capacitor.getPlatform() !== 'web'){
 
 			await this.requestPermissions();
-			return await this.addListeners();
+
+			const token: string | undefined = await this.addListeners();
+
+			await JitCallPlugin.initialize();
+			this.setupJitCallListeners();
+
+			return token;
 
 		}
 
@@ -79,45 +86,34 @@ import { v4 as uuidv4 } from 'uuid';
 
 	}
 
-	public async sendNotification(userFrom: User, userTo: User): Promise<Observable<Ravishing | Error>> {
+	private setupJitCallListeners(): void {
 
-		/*const contact: Contact | undefined = undefined;//await this.contactService.findOneByContactWithSuperKey(userTo.id as string, userFrom.contact);
+		JitCallPlugin.addListener('incomingCall', (data) => {
 
-		const contactFrom: User | Contact = contact ? contact : userFrom;
+			this.handleIncomingCall(data);
 
-		const notification: Notification = {
+		});
 
-			title: 'Incoming call',
-			body: `${contactFrom.name} ${contactFrom.surname} is calling you.`
+	}
+
+	private async handleIncomingCall(data: { meetingId: string; userFrom: string }): Promise<void> {
+
+		const userAccepted = true; 
+		
+		if (userAccepted) {
+
+			await JitCallPlugin.startCall({
+
+				meetingId: data.meetingId,
+				name: 'Nombre del usuario'
+
+			});
 
 		}
 
-		const data: Data = {
+	}
 
-			userId: userTo.id,
-			meetingId: uuidv4(),
-			type: 'incoming_call',
-			name: userTo.name,
-			userFrom: userFrom.id,
-
-		};
-
-		const android: Android = {
-
-			priority: 'high',
-			data: data
-
-		};
-
-		const playload: Playload = {
-
-			token: userTo.token,
-			notification: notification,
-			android: android
-
-		};
-
-		return this.ravishingService.send(playload);/**/
+	public async sendNotification(userFrom: User, userTo: User): Promise<Observable<Ravishing | Error>> {
 
 		return this.contactService.findOneByContactWithSuperKey(userTo.id as string, userFrom.contact).then(contact => {
 

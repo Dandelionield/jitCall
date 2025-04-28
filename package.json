@@ -33,6 +33,7 @@
     "@cloudinary/url-gen": "^1.21.0",
     "@ionic/angular": "^8.0.0",
     "@sweetalert2/ngx-sweetalert2": "^13.0.0",
+    "capacitor-jit-call-plugin": "file:../jit-call",
     "cloudinary": "^2.6.0",
     "cloudinary-core": "^2.13.1",
     "ionicons": "^7.0.0",
