@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { ActionPerformed, PushNotificationSchema, PushNotifications, Token } from '@capacitor/push-notifications';
 import { Capacitor } from '@capacitor/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { User } from '@entities/user.entity';
-import { Contact } from '@entities/contact.entity';
+import { User } from '@core/services/user/entities/user.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { ContactService } from '@core/services/contact/contact.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
 import { Ravishing } from '@models/ravishing.model';
@@ -12,7 +12,6 @@ import { Data } from '@models/data.model';
 import { Android } from '@models/android.model';
 import { Playload } from '@models/playload.model';
 import { Error } from '@models/error.model';
-import { JitCall as JitCallPlugin } from 'capacitor-jit-call-plugin/src';
 import { v4 as uuidv4 } from 'uuid';
 
 @Injectable({
@@ -36,80 +35,11 @@ import { v4 as uuidv4 } from 'uuid';
 
 			const token: string | undefined = await this.addListeners();
 
-			await JitCallPlugin.initialize();
-			this.setupJitCallListeners();
-
 			return token;
 
 		}
 
 		return undefined;
-
-	}
-
-	private async requestPermissions(): Promise<void> {
-
-		const { receive } = await PushNotifications.requestPermissions();
-
-		if (receive === 'granted') {
-
-			await PushNotifications.register();
-
-		}
-
-	}
-
-	private async addListeners(): Promise<string | undefined> {
-
-		return new Promise((resolve, reject) => {
-
-			PushNotifications.addListener('registration', (token: Token) => {
-
-				this.fcmToken = token.value;
-				resolve(token.value);
-
-			});
-
-			PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
-
-				this._notificationRecieved.next(notification);
-
-			});
-
-			PushNotifications.addListener('pushNotificationActionPerformed', (action: ActionPerformed) => {
-
-				
-
-			});
-
-		});
-
-	}
-
-	private setupJitCallListeners(): void {
-
-		JitCallPlugin.addListener('incomingCall', (data) => {
-
-			this.handleIncomingCall(data);
-
-		});
-
-	}
-
-	private async handleIncomingCall(data: { meetingId: string; userFrom: string }): Promise<void> {
-
-		const userAccepted = true; 
-		
-		if (userAccepted) {
-
-			await JitCallPlugin.startCall({
-
-				meetingId: data.meetingId,
-				name: 'Nombre del usuario'
-
-			});
-
-		}
 
 	}
 
@@ -160,6 +90,45 @@ import { v4 as uuidv4 } from 'uuid';
 	public async getToken(): Promise<string | null> {
 
 		return this.fcmToken;
+
+	}
+
+	private async requestPermissions(): Promise<void> {
+
+		const { receive } = await PushNotifications.requestPermissions();
+
+		if (receive === 'granted') {
+
+			await PushNotifications.register();
+
+		}
+
+	}
+
+	private async addListeners(): Promise<string | undefined> {
+
+		return new Promise((resolve, reject) => {
+
+			PushNotifications.addListener('registration', (token: Token) => {
+
+				this.fcmToken = token.value;
+				resolve(token.value);
+
+			});
+
+			PushNotifications.addListener('pushNotificationReceived', (notification: PushNotificationSchema) => {
+
+				this._notificationRecieved.next(notification);
+
+			});
+
+			PushNotifications.addListener('pushNotificationActionPerformed', (action: ActionPerformed) => {
+
+				
+
+			});
+
+		});
 
 	}
 

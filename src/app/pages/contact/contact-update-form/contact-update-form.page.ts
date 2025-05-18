@@ -5,8 +5,8 @@ import { UserService } from '@core/services/user/user.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { Contact } from '@entities/contact.entity';
-import { User } from '@entities/user.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
+import { User } from '@core/services/user/entities/user.entity';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { SweetAlertResult } from 'sweetalert2';
 
@@ -133,30 +133,40 @@ import { SweetAlertResult } from 'sweetalert2';
 
 	}
 
-	public async delete(): Promise<void> {
+	private async delete(): Promise<void> {
 
-		this.contactService.delete(this.contact.id as string).then((success: boolean) => {
+		this.loadingService.show('Deleting');
 
-			if (!success){
+		try{
 
-				this.swalService.showException('Error', 'Unable to delete');
+			let success: boolean = await this.contactService.delete(this.contact.id as string);
 
-			}else{
+			if (success){
 
 				this.router.navigate(['/home']);
 
+			}else{
+
+				this.swalService.showException('Error', 'Unable to delete');
+
 			}
 
-		}).catch((e: any) => {
+		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
-		});
+		}finally{
+
+			this.loadingService.hide();
+
+		}
 
 	}
 
-	public async update(): Promise<void> {
-		
+	private async update(): Promise<void> {
+
+		this.loadingService.show('Updating');
+
 		try{
 
 			if (this.contactForm.invalid) throw new Error('Invalid Paramethers');
@@ -183,31 +193,27 @@ import { SweetAlertResult } from 'sweetalert2';
 
 			};
 
-			this.contactService.update(this.contact.id as string, conta).then((success: boolean) => {
+			let success: boolean = await this.contactService.update(this.contact.id as string, conta);
 
-				if (!success){
+			if (success){
 
-					this.swalService.showException('Error', 'Unable to update');
+				this.router.navigate(['/home']);
 
-				}else{
+			}else{
 
-					this.router.navigate(['/home']);
+				this.swalService.showException('Error', 'Unable to update');
 
-				}
-
-			}).catch((e: any) => {
-
-				this.swalService.showException('Error', e.message);
-
-			});
+			}
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
-		}/**/
+		}finally{
 
-		
+			this.loadingService.hide();
+
+		}
 
 	}
 

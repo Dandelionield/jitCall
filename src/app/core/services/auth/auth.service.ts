@@ -17,9 +17,8 @@ import {
 import { FirebaseError } from '@angular/fire/app';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 import { UserService } from '@core/services/user/user.service';
-import { ContactService } from '@core/services/contact/contact.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
-import { User } from '@entities/user.entity';
+import { User } from '@core/services/user/entities/user.entity';
 import { Credential } from '@models/credential.model';
 import { isRavishingToken } from '@models/ravishing.model';
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -40,7 +39,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 		private auth: Auth,
 		private userService: UserService,
-		private contactService: ContactService,
 		private ravishingService: RavishingService,
 		private capacitorService: CapacitorService
 
@@ -110,7 +108,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 	}
 
-	public async login(cred: Credential): Promise<string> {
+	public async login(cred: Credential): Promise<string | undefined> {
 
 		try {
 
@@ -140,7 +138,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 			}else{
 
-				throw new FirebaseError('404', 'Wrong credentials.');
+				throw new FirebaseError('ERROR', 'Wrong credentials.');
+				return undefined;
 
 			}
 
@@ -156,11 +155,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 			}
 
+			return undefined;
+
 		}
 
 	}
 
-	public async logup(cred: Credential, user: User): Promise<string> {
+	public async logup(cred: Credential, user: User): Promise<string | undefined> {
 
 		try {
 
@@ -173,12 +174,18 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 				user.id = userCredential.user.uid;
 
-				let id: string = await this.userService.insert(DToken!=undefined ? {
+				let id: string | undefined = await this.userService.insert(DToken!=undefined ? {
 
 					token: DToken,
 					...user
 
 				} : user);
+
+				if (!id){
+
+					throw new FirebaseError('Error', 'Unable to log');
+
+				}
 
 				this._loggedUser.next(user);
 
@@ -187,6 +194,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 			}else{
 
 				throw new FirebaseError('404', 'Wrong paramethers.');
+				return undefined;
 
 			}
 
@@ -201,6 +209,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 				throw new Error(e.message);
 
 			}
+
+			return undefined;
 
 		}
 

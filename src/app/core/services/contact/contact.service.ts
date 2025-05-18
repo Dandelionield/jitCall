@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IContactQuery } from './interfaces/contact.query.interface';
-import { Contact } from '@entities/contact.entity';
-import { User } from '@entities/user.entity';
+import { Contact } from './entities/contact.entity';
+import { User } from '@core/services/user/entities/user.entity';
 import { environment } from '@environment/environment';
 import { map } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
+import { FirebaseError } from '@angular/fire/app';
 
 import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, query, where, limit } from '@angular/fire/firestore';
 
@@ -13,7 +14,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	providedIn: 'root'
 
-}) export class ContactService implements IContactQuery<Contact, 'id'>, IStatement<Contact, 'id'>{
+}) export class ContactService implements IContactQuery<Contact>, IStatement<Contact>{
 
 	private readonly superCollectionName: string = environment.firebase.collections.user.name;
 	private readonly collectionName: string = environment.firebase.collections.contact.name;
@@ -30,58 +31,82 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	public findOne(key: string): Promise<Contact | undefined> {
 
-		return getDoc(doc(
+		try{
 
-			collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
-			key
+			return getDoc(doc(
 
-		)).then((snapshot) => snapshot.data()) as Promise<Contact | undefined>;
+				collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
+				key
+
+			)).then((snapshot) => snapshot.data()) as Promise<Contact | undefined>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
 
 	}
 
 	public findByName(name: string): Observable<Array<Contact>> {
 
-		return from(getDocs(query(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`)))).pipe(
+		try{
 
-			map(snapshot => snapshot.docs.map(
+			return from(getDocs(query(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`)))).pipe(
 
-				doc => ({
+				map(snapshot => snapshot.docs.map(
 
-					id: doc.id,
-					...doc.data()
+					doc => ({
 
-				}) as Contact
-				
-			).filter(
+						id: doc.id,
+						...doc.data()
 
-				Contact => Contact.name.toLowerCase().includes(name.toLowerCase().trim())
+					}) as Contact
+					
+				).filter(
 
-			))
+					Contact => Contact.name.toLowerCase().includes(name.toLowerCase().trim())
 
-		);
+				))
+
+			);
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
 
 	}
 
 	public findOneByContactWithSuperKey<User>(superKey: string, contact: string): Promise<Contact | undefined>{
 
-		return getDocs(query(
+		try{
 
-			collection(this.firestore, `${this.superCollectionName}/${superKey}/${this.collectionName}`),
-			where('contact', '==', contact),
-			limit(1)
+			return getDocs(query(
 
-		)).then((snapshot) => {
+				collection(this.firestore, `${this.superCollectionName}/${superKey}/${this.collectionName}`),
+				where('contact', '==', contact),
+				limit(1)
 
-			if (snapshot.empty) return undefined;
+			)).then((snapshot) => {
 
-			return {
+				if (snapshot.empty) return undefined;
 
-				id: snapshot.docs[0].id, 
-				...snapshot.docs[0].data()
+				return {
 
-			} as Contact;
+					id: snapshot.docs[0].id, 
+					...snapshot.docs[0].data()
 
-		}) as Promise<Contact | undefined>;
+				} as Contact;
+
+			}) as Promise<Contact | undefined>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
 
 	}
 
@@ -95,16 +120,25 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public async insert(entity: Contact): Promise<string> {
+	public async insert(entity: Contact): Promise<string | undefined> {
 
-		const doc = await addDoc(
+		try{
 
-			collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
-			entity
+			const doc = await addDoc(
 
-		);
+				collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
+				entity
 
-		return doc.id;
+			);
+
+			return doc.id;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+			return undefined;
+
+		}
 
 	}
 
@@ -120,9 +154,9 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 			return true;
 
-		}catch (error){
+		}catch (e: any){
 
-			console.error('Error updating Contact:', error);
+			throw new FirebaseError('Error', e.message);
 			return false;
 
 		}
@@ -142,9 +176,9 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 			return true;
 
-		}catch (error){
+		}catch (e: any){
 
-			console.error('Error deleting Contact:', error);
+			throw new FirebaseError('Error', e.message);
 			return false;
 
 		}

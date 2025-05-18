@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
 import { ContactService } from '@core/services/contact/contact.service';
 import { SwalService } from '@shared/services/swal/swal.service';
+import { LoadingService } from '@shared/services/loading/loading.service';
 import { Router } from '@angular/router';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 
 @Component({
 
@@ -29,14 +30,17 @@ import { Contact } from '@entities/contact.entity';
 		private fb: FormBuilder,
 		private contactService: ContactService,
 		private swalService: SwalService,
+		private loadingService: LoadingService,
 		private router: Router
 
 	) {}
 
 	public async ngOnInit(): Promise<void> {}
 
-	public onSubmit(): void {
-		
+	public async onSubmit(): Promise<void> {
+
+		this.loadingService.show('Validating');
+
 		try{
 
 			if (this.contactForm.invalid) throw new Error('Invalid Paramethers');
@@ -63,19 +67,25 @@ import { Contact } from '@entities/contact.entity';
 
 			};
 
-			this.contactService.insert(cont).then((id: string) => {
+			let id: string | undefined = await this.contactService.insert(cont);
+
+			if (id){
 
 				this.router.navigate(['/home']);
 
-			}).catch((e: any) => {
+			}else{
 
-				this.swalService.showException('Error', e.message);
+				this.swalService.showException('Error', 'Unable to add contact');
 
-			});
+			}
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
+
+		}finally{
+
+			this.loadingService.hide();
 
 		}
 

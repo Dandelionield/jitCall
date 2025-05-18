@@ -12,9 +12,26 @@ import { Observable } from 'rxjs';
 }) export class LoadingComponent implements OnInit {
 
 	public isLoading$: Observable<boolean> = this.loadingService.isLoading$;
+	public loadingMessage: string;
 
-	public constructor(private loadingService: LoadingService) {}
+	public constructor(private loadingService: LoadingService) {
 
-	public ngOnInit(): void {}
+		this.loadingMessage = this.loadingService.loadingMessage;
+
+	}
+
+	public ngOnInit(): void {
+
+		this.isLoading$.subscribe({
+
+			next: (t) => {
+
+				this.loadingMessage = this.loadingService.loadingMessage;
+
+			}, error: (e) => console.log(e)
+
+		});
+
+	}
 
 }

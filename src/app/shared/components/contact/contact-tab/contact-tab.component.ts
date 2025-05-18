@@ -4,7 +4,7 @@ import { CallService } from '@shared/services/call/call.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { Subscription, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { isRavishing } from '@models/ravishing.model';
 
 @Component({

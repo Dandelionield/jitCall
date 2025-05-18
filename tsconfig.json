@@ -8,7 +8,6 @@
 			"@shared/*": ["src/app/shared/*"],
 			"@core/*": ["src/app/core/*"],
 			"@environment/*": ["src/environments/*"],
-			"@entities/*": ["src/domain/entities/*"],
 			"@models/*": ["src/domain/models/*"],
 			"@interfaces/*": ["src/domain/interfaces/*"]
 

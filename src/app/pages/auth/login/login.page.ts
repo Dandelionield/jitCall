@@ -34,9 +34,9 @@ import { Credential } from '@models/credential.model';
 
 	public ngOnInit(): void {}
 
-	public onSubmit(): void {
+	public async onSubmit(): Promise<void> {
 
-		this.loadingService.show();
+		this.loadingService.show('Conecting');
 
 		try{
 
@@ -63,23 +63,27 @@ import { Credential } from '@models/credential.model';
 
 			};
 
-			this.authService.login(cred).then((token: string) => {
+			let UToken: string | undefined = await this.authService.login(cred);
+
+			if (UToken){
 
 				this.router.navigate(['/home']);
 
-			}).catch((e: any) => {
+			}else{
 
-				this.swalService.showException('Error', e.message);
+				this.swalService.showException('Error', 'Unable to access');
 
-			});
+			}
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
-		}
+		}finally{
 
-		this.loadingService.hide();
+			this.loadingService.hide();
+
+		}
 
 	}
 

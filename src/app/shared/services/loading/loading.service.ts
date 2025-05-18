@@ -9,11 +9,13 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 	private _isLoading: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 	public isLoading$: Observable<boolean> = this._isLoading.asObservable();
+	public loadingMessage: string = 'loading';
 
 	public constructor() {}
 
-	public show(): void {
+	public show(loadingMessage: string = 'loading'): void {
 
+		this.loadingMessage = loadingMessage;
 		this._isLoading.next(true);
 
 	}

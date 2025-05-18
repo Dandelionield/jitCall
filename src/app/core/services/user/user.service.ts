@@ -2,11 +2,12 @@ import { Injectable } from '@angular/core';
 import { ContactService } from '@core/services/contact/contact.service';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IUserQuery } from './interfaces/user.query.interface';
-import { User } from '@entities/user.entity';
-import { Contact } from '@entities/contact.entity';
+import { User } from '@core/services/user/entities/user.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { FirebaseError } from '@angular/fire/app';
 
 import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, query, where, limit } from '@angular/fire/firestore';
 
@@ -14,7 +15,7 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	providedIn: 'root'
 
-}) export class UserService implements IUserQuery<User, 'id', Contact>, IStatement<User, 'id'>{
+}) export class UserService implements IUserQuery<User, Contact>, IStatement<User>{
 
 	private readonly collectionName: string = environment.firebase.collections.user.name;
 	private readonly subCollectionName: string = environment.firebase.collections.contact.name;
@@ -24,82 +25,124 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	public findOne(key: string): Promise<User | undefined> {
 
-		return getDoc(doc(
+		try{
 
-			collection(this.firestore, this.collectionName),
-			key
+			return getDoc(doc(
 
-		)).then((snapshot) => snapshot.data()) as Promise<User | undefined>;
+				collection(this.firestore, this.collectionName),
+				key
+
+			)).then((snapshot) => snapshot.data()) as Promise<User | undefined>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+			return undefined as unknown as Promise<undefined>;
+
+		}
 
 	}
 
 	public findOneByContact(contact: Contact): Observable<User | undefined> {
 
-		return collectionData(query(collection(this.firestore, this.collectionName), where('contact', '==', contact.contact), limit(1)), {
+		try{
 
-			idField: this.collectionIDField as keyof User
-
-		}).pipe(map(
-
-			users => users[0] as User | undefined
-
-		)) as Observable<User>;
-
-	}
-
-	public findOneWithContacts(key: string): Observable<User | undefined> {
-
-		return docData(
-
-			doc(this.firestore, `${this.collectionName}/${key}`),{
+			return collectionData(query(collection(this.firestore, this.collectionName), where('contact', '==', contact.contact), limit(1)), {
 
 				idField: this.collectionIDField as keyof User
 
-			}
+			}).pipe(map(
 
-		).pipe(
+				users => users[0] as User | undefined
 
-			switchMap(user => {
+			)) as Observable<User>;
 
-				if (!user) return of(undefined);
+		}catch(e: any){
 
-				this.contactService.setSuperKey(key);
-				
-				return this.contactService.findAll().pipe(
+			throw new FirebaseError('Error', e.message);
 
-					map(contacts => ({
-						...user,
-						contacts: contacts
-					}))
-
-				);
-
-			}), catchError(error => {
-
-				console.error('Error fetching user with contacts:', error);
-				return of(undefined);
-
-			})
-
-		) as Observable<User>;
+		}
 
 	}
+
+	/*public findOneWithContacts(key: string): Observable<User | undefined> {
+
+		try{
+
+			return docData(
+
+				doc(this.firestore, `${this.collectionName}/${key}`),{
+
+					idField: this.collectionIDField as keyof User
+
+				}
+
+			).pipe(
+
+				switchMap(user => {
+
+					if (!user) return of(undefined);
+
+					this.contactService.setSuperKey(key);
+					
+					return this.contactService.findAll().pipe(
+
+						map(contacts => ({
+							...user,
+							contacts: contacts
+						}))
+
+					);
+
+				}), catchError(error => {
+
+					console.error('Error fetching user with contacts:', error);
+					return of(undefined);
+
+				})
+
+			) as Observable<User>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
+
+	}/**/
 
 	public findAll(): Observable<Array<User>> {
 
-		return collectionData(collection(this.firestore, this.collectionName), {
+		try{
 
-			idField: this.collectionIDField as keyof User
+			return collectionData(collection(this.firestore, this.collectionName), {
 
-		}) as Observable<Array<User>>;
+				idField: this.collectionIDField as keyof User
+
+			}) as Observable<Array<User>>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
 
 	}
  
-	public async insert(entity: User): Promise<string> {
+	public async insert(entity: User): Promise<string | undefined> {
 
-		await setDoc(doc(this.firestore, `${this.collectionName}/${entity.id as string}`), entity);
+		try{
 
-		return entity.id as string;
+			await setDoc(doc(this.firestore, `${this.collectionName}/${entity.id as string}`), entity);
+
+			return entity.id as string;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+			return undefined;
+
+		}
 
 	}
 
@@ -111,9 +154,9 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 			return true;
 
-		}catch (error){
+		}catch (e: any){
 
-			console.error('Error updating User:', error);
+			throw new FirebaseError('Error', e.message);
 			return false;
 
 		}
@@ -133,9 +176,9 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 			return true;
 
-		}catch (error){
+		}catch (e: any){
 
-			console.error('Error deleting User:', error);
+			throw new FirebaseError('Error', e.message);
 			return false;
 
 		}

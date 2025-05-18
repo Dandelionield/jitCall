@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { CallService } from '@shared/services/call/call.service';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { Observable } from 'rxjs';
 
 @Component({

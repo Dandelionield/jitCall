@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { User } from '@entities/user.entity';
+import { User } from '@core/services/user/entities/user.entity';
 
 @Component({
 

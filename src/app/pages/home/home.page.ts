@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
 import { AuthService } from '@core/services/auth/auth.service';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { Router } from '@angular/router';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { SwalService } from '@shared/services/swal/swal.service';

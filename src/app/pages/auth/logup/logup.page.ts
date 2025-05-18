@@ -5,7 +5,7 @@ import { AuthService } from '@core/services/auth/auth.service';
 import { Credential } from '@models/credential.model';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { LoadingService } from '@shared/services/loading/loading.service';
-import { User } from '@entities/user.entity';
+import { User } from '@core/services/user/entities/user.entity';
 
 @Component({
 
@@ -38,9 +38,9 @@ import { User } from '@entities/user.entity';
 
 	public ngOnInit(): void {}
 
-	public onSubmit(): void {
+	public async onSubmit(): Promise<void> {
 
-		this.loadingService.show();
+		this.loadingService.show('Logging');
 
 		try{
 
@@ -80,23 +80,27 @@ import { User } from '@entities/user.entity';
 
 			}
 
-			this.authService.logup(cred, user).then((token: string) => {
+			let UToken: string | undefined = await this.authService.logup(cred, user);
+
+			if (UToken){
 
 				this.router.navigate(['/home']);
 
-			}).catch((e: any) => {
+			}else{
 
-				this.swalService.showException('Error', e.message);
+				this.swalService.showException('Error', 'Unable to access');
 
-			});
+			}
 
 		}catch (e: any){
 
 			this.swalService.showException('Error', e.message);
 
-		}
+		}finally{
 
-		this.loadingService.hide();
+			this.loadingService.hide();
+
+		}
 
 	}
 

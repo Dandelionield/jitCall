@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 
 @Injectable({
 

@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Contact } from '@entities/contact.entity';
+import { Contact } from '@core/services/contact/entities/contact.entity';
 import { Router } from '@angular/router';
 import { ContactTabService } from '@shared/services/contact-tab/contact-tab.service';
 

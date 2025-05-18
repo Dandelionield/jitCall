@@ -1,8 +1,9 @@
+import { Entity } from '@models/entity.model';
 import { Observable } from 'rxjs';
 
-export interface IQuery<T, K extends keyof T>{
+export interface IQuery<T extends Entity<unknown>>{
 
-	findOne(key: T[K]): Promise<T | undefined>;
+	findOne(key: T['id']): Promise<T | undefined>;
 
 	findAll(): Observable<Array<T>>;
 

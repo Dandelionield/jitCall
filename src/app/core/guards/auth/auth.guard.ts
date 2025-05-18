@@ -29,8 +29,6 @@ import { Observable } from 'rxjs';
 				const currentToken = this.authService.getCurrentToken();
 				const storedToken = localStorage.getItem('access_token');
 
-				//console.log(`currentToken !== storedToken: ${currentToken !== storedToken} because ${currentToken} es diferente a ${storedToken}`);
-
 				if (currentToken !== storedToken){
 
 					this.authService.logout();
