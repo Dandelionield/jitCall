@@ -1,35 +1,49 @@
-#container {
+.custom-segment {
+	margin-bottom: 1.5rem;
+	--background: var(--ion-color-step-50);
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	
+	ion-segment-button {
+		--color: var(--ion-color-step-600);
+		--color-checked: var(--ion-color-primary);
+		--indicator-color: transparent;
+		--padding-top: 12px;
+		--padding-bottom: 12px;
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		
+		&::part(indicator) {
+			background: var(--ion-color-primary);
+			height: 3px;
+			border-radius: 2px;
+			transform: scaleX(0.8);
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		}
 
-	text-align: center;
-
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 50%;
-	transform: translateY(-50%);
-
+		&.segment-button-checked {
+			--color: var(--ion-color-primary);
+			--background-hover: transparent;
+			
+			&::part(indicator) {
+				transform: scaleX(1);
+			}
+		}
+	}
 }
 
-#container strong {
-
-	font-size: 20px;
-	line-height: 26px;
-
+// Transición suave entre secciones
+app-chat-list, app-contact-list {
+	display: block;
+	animation: fadeSlide 0.4s ease-out;
 }
 
-#container p {
-
-	font-size: 16px;
-	line-height: 22px;
-
-	color: #8c8c8c;
-
-	margin: 0;
-
-}
-
-#container a {
-
-	text-decoration: none;
-
+@keyframes fadeSlide {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
 }

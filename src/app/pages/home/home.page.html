@@ -2,38 +2,34 @@
 
 <app-call></app-call>
 
-<app-header title = "Contacts"></app-header>
+<app-header [title] = "showChats ? 'Chats' : 'Contacts'"></app-header>
 
 <ion-content class="ion-padding">
 
-	<div class="search-container">
+	<ion-segment [(ngModel)]="showChats" (ionChange)="handleSegmentChange($event)" class="custom-segment">
 
-		<ion-input [(ngModel)]="searchText" (ionInput)="findByName()" placeholder="Search Contact..." clearInput></ion-input>
+		<ion-segment-button value="chats">
 
-	</div>
+			<ion-label>Chats</ion-label>
 
-	<div class="contacts-list">
+		</ion-segment-button>
 
-		@if (contacts){
+		<ion-segment-button value="contacts">
 
-			@for (contact of contacts; track contact.id){
+			<ion-label>Contacts</ion-label>
 
-				<app-contact-row [contact]="contact"></app-contact-row>
+		</ion-segment-button>
 
-			}
+	</ion-segment>
 
-		}
+	@if (showChats) {
 
-	</div>
+		<app-chat-list></app-chat-list>
 
-	<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+	}@else{
 
-		<ion-fab-button (click) = "navigateToInsert()">
+		<app-contact-list></app-contact-list>
 
-			<ion-icon name="add"></ion-icon>
-
-		</ion-fab-button>
-
-	</ion-fab>
+	}
 
 </ion-content>

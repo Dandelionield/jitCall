@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IContactQuery } from './interfaces/contact.query.interface';
-import { Contact } from './entities/contact.entity';
-import { User } from '@core/services/user/entities/user.entity';
+import { Contact } from './entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { environment } from '@environment/environment';
 import { map } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, query, where, limit } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, setDoc, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
 	providedIn: 'root'
 
-}) export class ContactService implements IContactQuery<Contact>, IStatement<Contact>{
+}) export class ContactService implements IContactQuery, IStatement<Contact>{
 
 	private readonly superCollectionName: string = environment.firebase.collections.user.name;
 	private readonly collectionName: string = environment.firebase.collections.contact.name;
@@ -29,7 +29,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public findOne(key: string): Promise<Contact | undefined> {
+	public findOne(key: Contact['id']): Promise<Contact | undefined> {
 
 		try{
 
@@ -48,7 +48,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public findByName(name: string): Observable<Array<Contact>> {
+	public findByName(name: Contact['name']): Observable<Array<Contact>> {
 
 		try{
 
@@ -79,7 +79,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public findOneByContactWithSuperKey<User>(superKey: string, contact: string): Promise<Contact | undefined>{
+	public findOneByContactWithSuperKey(superKey: User['id'], contact: Contact['contact']): Promise<Contact | undefined>{
 
 		try{
 
@@ -112,26 +112,29 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	public findAll(): Observable<Array<Contact>> {
 
-		return collectionData(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`), {
+		try{
 
-			idField: this.collectionIDField as keyof Contact
+			return collectionData(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`), {
 
-		}) as Observable<Array<Contact>>;
+				idField: this.collectionIDField as keyof Contact
+
+			}) as Observable<Array<Contact>>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
 
 	}
 
-	public async insert(entity: Contact): Promise<string | undefined> {
+	public async insert(entity: Contact): Promise<Contact['id'] | undefined> {
 
 		try{
 
-			const doc = await addDoc(
+			await setDoc(doc(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}/${entity.id as string}`), entity);
 
-				collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
-				entity
-
-			);
-
-			return doc.id;
+			return entity.id as string;
 
 		}catch(e: any){
 
@@ -142,7 +145,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public async update(key: string, entity: Partial<Contact>): Promise<boolean> {
+	public async update(key: Contact['id'], entity: Partial<Contact>): Promise<boolean> {
 
 		try{
 
@@ -163,7 +166,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
-	public async delete(key: string): Promise<boolean> {
+	public async delete(key: Contact['id']): Promise<boolean> {
 
 		try{
 

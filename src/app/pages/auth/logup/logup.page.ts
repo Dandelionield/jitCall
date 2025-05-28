@@ -5,7 +5,7 @@ import { AuthService } from '@core/services/auth/auth.service';
 import { Credential } from '@models/credential.model';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { LoadingService } from '@shared/services/loading/loading.service';
-import { User } from '@core/services/user/entities/user.entity';
+import { User } from '@core/services/user/entity/user.entity';
 
 @Component({
 
@@ -73,9 +73,9 @@ import { User } from '@core/services/user/entities/user.entity';
 
 			const user: User = {
 
-				name: name,
-				surname: surname,
-				contact: contact,
+				name: name.trim(),
+				surname: surname.trim(),
+				contact: contact.trim(),
 				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`//'https://ionicframework.com/docs/img/demos/avatar.svg'
 
 			}

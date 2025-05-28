@@ -24,6 +24,11 @@ export const environment = {
 				name: 'contacts',
 				idField: 'id'
 
+			}, chat: {
+
+				name: 'chat',
+				idField: 'id'
+
 			}
 
 		}

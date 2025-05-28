@@ -5,8 +5,8 @@ import { UserService } from '@core/services/user/user.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
-import { Contact } from '@core/services/contact/entities/contact.entity';
-import { User } from '@core/services/user/entities/user.entity';
+import { Contact } from '@core/services/contact/entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { SweetAlertResult } from 'sweetalert2';
 

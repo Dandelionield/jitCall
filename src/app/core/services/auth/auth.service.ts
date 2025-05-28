@@ -18,7 +18,7 @@ import { FirebaseError } from '@angular/fire/app';
 import { CapacitorService } from '@core/services/capacitor/capacitor.service';
 import { UserService } from '@core/services/user/user.service';
 import { RavishingService } from '@core/services/ravishing/ravishing.service';
-import { User } from '@core/services/user/entities/user.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { Credential } from '@models/credential.model';
 import { isRavishingToken } from '@models/ravishing.model';
 import { BehaviorSubject, Observable } from 'rxjs';

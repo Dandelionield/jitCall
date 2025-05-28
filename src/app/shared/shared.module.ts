@@ -6,8 +6,11 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
+import { ContactListComponent } from './components/contact/contact-list/contact-list.component';
 import { ContactRowComponent } from './components/contact/contact-row/contact-row.component';
 import { ContactTabComponent } from './components/contact/contact-tab/contact-tab.component';
+import { ChatListComponent } from './components/chat/chat-list/chat-list.component';
+import { ChatRowComponent } from './components/chat/chat-row/chat-row.component';
 import { UserCardComponent } from './components/user/user-card/user-card.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
@@ -22,8 +25,11 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 
 	declarations: [
 
+		ContactListComponent,
 		ContactRowComponent,
 		ContactTabComponent,
+		ChatListComponent,
+		ChatRowComponent,
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
@@ -44,8 +50,11 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 		IonicModule,
 		ReactiveFormsModule,
 		RouterModule,
+		ContactListComponent,
 		ContactRowComponent,
 		ContactTabComponent,
+		ChatListComponent,
+		ChatRowComponent,
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,

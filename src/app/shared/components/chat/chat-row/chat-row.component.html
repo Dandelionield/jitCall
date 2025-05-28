@@ -1,0 +1,35 @@
+<ion-item button (click)="navigateToChat()" detail="false">
+
+	@if (chat) {
+
+		<ion-avatar slot="start">
+
+			<img [src]="getChatPicture()" alt="Chat picture">
+
+		</ion-avatar>
+
+		<div class="content-container">
+
+			<div class="text-container">
+
+				<h3>{{ getChatName() }}</h3>
+
+				<p class="last-message">
+
+					
+
+				</p>
+
+			</div>
+			
+			<div class="timestamp">
+
+				{{ formatTimestamp(chat.updatedAt) }}
+
+			</div>
+
+		</div>
+
+	}
+
+</ion-item>

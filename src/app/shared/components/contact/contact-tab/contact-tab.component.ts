@@ -2,9 +2,11 @@ import { Component, OnInit, Input } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { CallService } from '@shared/services/call/call.service';
 import { SwalService } from '@shared/services/swal/swal.service';
+import { LoadingService } from '@shared/services/loading/loading.service';
 import { Subscription, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { Contact } from '@core/services/contact/entities/contact.entity';
+import { Contact } from '@core/services/contact/entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { isRavishing } from '@models/ravishing.model';
 
 @Component({
@@ -23,14 +25,14 @@ import { isRavishing } from '@models/ravishing.model';
 	}) public contact!: Contact;
 
 	public isCalling$: Observable<boolean> = this.callService.isCalling$;
-	private userSub: Subscription | undefined = undefined;
 	private callSub: Subscription | undefined = undefined;
 
 	public constructor(
 
 		private callService: CallService,
 		private swalService: SwalService,
-		private userService: UserService
+		private userService: UserService,
+		private loadingService: LoadingService,
 
 	) {}
 
@@ -41,13 +43,6 @@ import { isRavishing } from '@models/ravishing.model';
 			next: (t) => {
 
 				if (!t){
-
-					if (this.userSub){
-
-						this.userSub.unsubscribe();
-						this.userSub = undefined;
-
-					}
 
 					if (this.callSub){
 
@@ -64,44 +59,53 @@ import { isRavishing } from '@models/ravishing.model';
 
 	}
 
-	public call(callType: boolean = false): void {
+	public async call(callType: boolean = false): Promise<void> {
 
-		this.userSub = this.userService.findOneByContact(this.contact).pipe(take(1)).subscribe({
+		this.loadingService.show('Calling');
 
-			next: async (t) => {
+		try{
 
-				if (t!=undefined){
+			const user: User | undefined = await this.userService.findOne(this.contact.id);
 
-					this.callService.setCallType(callType);
-					this.callService.answer(this.contact);
-					this.callService.show();
+			if (user!=undefined){
 
-					this.callSub = (await this.callService.call(t)).subscribe({
+				this.callService.setCallType(callType);
+				this.callService.answer(this.contact);
+				this.callService.show();
 
-						next: (t) => {
+				this.callSub = (await this.callService.call(user)).subscribe({
 
-							console.log(t);
+					next: (t) => {
 
-							if (!isRavishing(t)){
+						console.log(t);
 
-								this.swalService.showException('Error', t.msg);
+						if (!isRavishing(t)){
 
-							}
+							this.swalService.showException('Error', t.msg);
 
-						}, error: (e) => this.swalService.showException('Error', e.message)
+						}
 
-					});
+					}, error: (e) => this.swalService.showException('Error', e.message)
 
-				}else{
+				});
 
-					this.swalService.showException('Error', `${this.contact.name} ${this.contact.surname} is not logged up on jitCall.`);
-					this.callService.hangUp();
+			}else{
 
-				}
+				this.swalService.showException('Error', `${this.contact.name} ${this.contact.surname} is not logged up on jitCall any longer.`);
+				this.callService.hangUp();
 
-			}, error: (e) => this.swalService.showException('Error', e.message)
+			}
 
-		});
+		}catch(e: any){
+
+			this.callService.hangUp();
+			this.swalService.showException('Error', e.message);
+
+		}finally{
+
+			this.loadingService.hide();
+
+		}
 
 	}
 

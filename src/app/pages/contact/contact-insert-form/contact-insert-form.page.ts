@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators } from '@angular/forms';
+import { UserService } from '@core/services/user/user.service';
 import { ContactService } from '@core/services/contact/contact.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { Router } from '@angular/router';
-import { Contact } from '@core/services/contact/entities/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
+import { Contact } from '@core/services/contact/entity/contact.entity';
 
 @Component({
 
@@ -28,6 +30,7 @@ import { Contact } from '@core/services/contact/entities/contact.entity';
 	public constructor(
 
 		private fb: FormBuilder,
+		private userService: UserService,
 		private contactService: ContactService,
 		private swalService: SwalService,
 		private loadingService: LoadingService,
@@ -57,12 +60,21 @@ import { Contact } from '@core/services/contact/entities/contact.entity';
 
 			}
 
+			const user: User | undefined = await this.userService.findOneByContact(contact.trim());
+
+			if (!user){
+
+				throw new Error(`User with contact ${contact} is not logged up on jitCall.`);
+
+			}
+
 			const cont: Contact = {
 
-				name: name,
-				surname: surname,
-				contact: contact,
-				email: email,
+				id: user.id,
+				name: name.trim(),
+				surname: surname.trim(),
+				contact: contact.trim(),
+				email: email.trim(),
 				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`//picture
 
 			};

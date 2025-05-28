@@ -1,0 +1,57 @@
+
+ion-item {
+	--padding-start: 12px;
+	--padding-end: 16px;
+	--min-height: 72px;
+}
+
+ion-avatar {
+	width: 48px;
+	height: 48px;
+	margin-inline-end: 16px;
+	
+	img {
+		object-fit: cover;
+	}
+}
+
+.content-container {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	width: 100%;
+	padding: 8px 0;
+}
+
+.text-container {
+	flex: 1;
+	min-width: 0;
+	
+	h2 {
+		font-weight: 500;
+		color: var(--ion-color-step-900);
+		margin: 0 0 4px 0;
+	}
+	
+	.last-message {
+		color: var(--ion-color-step-600);
+		font-size: 0.875rem;
+		margin: 0;
+	}
+}
+
+.timestamp {
+	color: var(--ion-color-step-500);
+	font-size: 0.75rem;
+	white-space: nowrap;
+	margin-left: 16px;
+	text-align: right;
+	min-width: 90px; /* Ancho mínimo para mantener alineación */
+}
+
+@mixin text-truncate {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

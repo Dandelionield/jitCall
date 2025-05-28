@@ -2,20 +2,20 @@ import { Injectable } from '@angular/core';
 import { ContactService } from '@core/services/contact/contact.service';
 import { IStatement } from '@interfaces/statement/statement.interface';
 import { IUserQuery } from './interfaces/user.query.interface';
-import { User } from '@core/services/user/entities/user.entity';
-import { Contact } from '@core/services/contact/entities/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
+import { Contact } from '@core/services/contact/entity/contact.entity';
 import { environment } from '@environment/environment';
 import { map, switchMap, catchError } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 
-import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, query, where, limit } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, doc, setDoc, getDoc, getDocs, query, where, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
 	providedIn: 'root'
 
-}) export class UserService implements IUserQuery<User, Contact>, IStatement<User>{
+}) export class UserService implements IUserQuery, IStatement<User>{
 
 	private readonly collectionName: string = environment.firebase.collections.user.name;
 	private readonly subCollectionName: string = environment.firebase.collections.contact.name;
@@ -23,7 +23,7 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	public constructor(private firestore: Firestore, private contactService: ContactService) {}
 
-	public findOne(key: string): Promise<User | undefined> {
+	public findOne(key: User['id']): Promise<User | undefined> {
 
 		try{
 
@@ -43,19 +43,17 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	}
 
-	public findOneByContact(contact: Contact): Observable<User | undefined> {
+	public async findOneByContact(contact: Contact['contact']): Promise<User | undefined> {
 
 		try{
 
-			return collectionData(query(collection(this.firestore, this.collectionName), where('contact', '==', contact.contact), limit(1)), {
+			return (await getDocs(query(
 
-				idField: this.collectionIDField as keyof User
+				collection(this.firestore, this.collectionName),
+				where('contact', '==', contact),
+				limit(1)
 
-			}).pipe(map(
-
-				users => users[0] as User | undefined
-
-			)) as Observable<User>;
+			))).docs.map(d => ({ ...d.data() as User }))[0];
 
 		}catch(e: any){
 
@@ -129,7 +127,7 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	}
  
-	public async insert(entity: User): Promise<string | undefined> {
+	public async insert(entity: User): Promise<User['id'] | undefined> {
 
 		try{
 
@@ -146,7 +144,7 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	}
 
-	public async update(key: string, entity: Partial<User>): Promise<boolean> {
+	public async update(key: User['id'], entity: Partial<User>): Promise<boolean> {
 
 		try{
 
@@ -163,7 +161,7 @@ import { Firestore, collection, collectionData, deleteDoc, updateDoc, docData, d
 
 	}
 
-	public async delete(key: string): Promise<boolean> {
+	public async delete(key: User['id']): Promise<boolean> {
 
 		try{
 

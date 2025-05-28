@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { Contact } from '@core/services/contact/entities/contact.entity';
-import { User } from '@core/services/user/entities/user.entity';
+import { Contact } from '@core/services/contact/entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { Ravishing } from '@models/ravishing.model';
 import { Error } from '@models/error.model';
 import { AuthService } from '@core/services/auth/auth.service';
