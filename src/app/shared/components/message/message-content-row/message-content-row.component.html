@@ -1,0 +1,49 @@
+<div class="message-row" [class.current-user]="isCurrentUser()">
+
+	<div class="avatar-container">
+
+		@if (showAvatar) {
+
+			<ion-avatar class="avatar">
+
+				<img [src]="getContactPicture()" alt="User avatar">
+
+			</ion-avatar>
+
+		}
+
+	</div>
+
+	<div class="message-content">
+
+		@if (!isCurrentUser() && showAvatar) {
+
+			<div class="sender-name">{{ getChatterName() }}</div>
+
+		}
+		
+		<div class="bubble" [class.deleted]="!message.state">
+
+			@if (message.state) {
+
+				<span>{{ message.content }}</span>
+
+				@if (message.modified) {
+
+					<span class="modified"> (modified)</span>
+
+				}
+
+			}@else{
+
+				<span class="deleted-text"><i>message deleted</i></span>
+
+			}
+
+			<div class="timestamp">{{ formatTimestamp(message.updatedAt) }}</div>
+
+		</div>
+
+	</div>
+
+</div>

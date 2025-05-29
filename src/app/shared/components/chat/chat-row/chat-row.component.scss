@@ -1,8 +1,18 @@
-
 ion-item {
+
+	--background: var(--ion-item-background);
 	--padding-start: 12px;
-	--padding-end: 16px;
-	--min-height: 72px;
+	--padding-end: 12px;
+	margin-bottom: 8px;
+	border-radius: 12px;
+	transition: transform 0.2s ease;
+		
+	&:active {
+
+		transform: scale(0.98);
+
+	}
+
 }
 
 ion-avatar {
@@ -18,7 +28,7 @@ ion-avatar {
 .content-container {
 	display: flex;
 	justify-content: space-between;
-	align-items: center;
+	align-items: left;
 	width: 100%;
 	padding: 8px 0;
 }
@@ -40,13 +50,21 @@ ion-avatar {
 	}
 }
 
+.timestamp-container {
+
+	flex-shrink: 0;
+	margin-left: auto;
+	padding-left: 8px;
+
+}
+
 .timestamp {
+
 	color: var(--ion-color-step-500);
 	font-size: 0.75rem;
 	white-space: nowrap;
-	margin-left: 16px;
 	text-align: right;
-	min-width: 90px; /* Ancho mínimo para mantener alineación */
+
 }
 
 @mixin text-truncate {

@@ -3,11 +3,7 @@
 
 	@for(chat of chats; track chat.id){
 
-		<ion-item>
-
-			<app-chat-row [chat] = "chat" [user_id] = "user_id"></app-chat-row>
-
-		</ion-item>
+		<app-chat-row [chat] = "chat" [user_id] = "user_id"></app-chat-row>
 
 	}
 

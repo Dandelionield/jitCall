@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { ChatService } from '@core/services/chat/chat.service';
@@ -16,8 +16,8 @@ import { Subscription } from 'rxjs';
 
 }) export class ChatListComponent implements OnInit, OnDestroy {
 
+	@Input() public user_id!: string;
 	public chats: Array<Chat> = [];
-	public user_id: string;
 	private chatsSub: Subscription | undefined = undefined;
 
 	public constructor(
@@ -38,7 +38,7 @@ import { Subscription } from 'rxjs';
 
 	public ngOnInit(): void {
 
-		this.loadingService.show();
+		this.loadingService.show('Loading Chats');
 
 		this.findAll();
 
@@ -54,18 +54,22 @@ import { Subscription } from 'rxjs';
 
 	}
 
-	public findAll(): void {
+	private findAll(): void {
 
-		this.chatsSub = this.chatService.findAllByUser(this.user_id).subscribe({
+		if (this.user_id){
 
-			next: (t) => {
+			this.chatsSub = this.chatService.findAllByUser(this.user_id).subscribe({
 
-				this.chats = t;
-				this.loadingService.hide();
+				next: (t) => {
 
-			}, error: (e: any) => this.swalService.showException('Error', e.message)
+					this.chats = t;
+					this.loadingService.hide();
 
-		});
+				}, error: (e: any) => this.swalService.showException('Error', e.message)
+
+			});
+
+		}
 
 	}
 

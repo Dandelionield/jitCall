@@ -1,0 +1,29 @@
+ion-content {
+
+	--padding-bottom: 70px;
+
+}
+
+ion-footer {
+
+	position: fixed;
+	bottom: 0;
+	width: 100%;
+
+	ion-toolbar {
+
+		--background: var(--ion-color-light);
+		padding: 8px;
+
+	}
+
+	ion-textarea {
+
+		background: black;
+		border-radius: 20px;
+		padding: 8px 16px;
+		max-height: 120px;
+
+	}
+
+}

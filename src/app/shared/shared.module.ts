@@ -9,8 +9,11 @@ import { RouterModule } from '@angular/router';
 import { ContactListComponent } from './components/contact/contact-list/contact-list.component';
 import { ContactRowComponent } from './components/contact/contact-row/contact-row.component';
 import { ContactTabComponent } from './components/contact/contact-tab/contact-tab.component';
+import { ChatHeaderComponent } from './components/chat/chat-header/chat-header.component';
 import { ChatListComponent } from './components/chat/chat-list/chat-list.component';
 import { ChatRowComponent } from './components/chat/chat-row/chat-row.component';
+import { MessageDisplayListComponent } from './components/message/message-display-list/message-display-list.component';
+import { MessageContentRowComponent } from './components/message/message-content-row/message-content-row.component';
 import { UserCardComponent } from './components/user/user-card/user-card.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
@@ -28,8 +31,11 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 		ContactListComponent,
 		ContactRowComponent,
 		ContactTabComponent,
+		ChatHeaderComponent,
 		ChatListComponent,
 		ChatRowComponent,
+		MessageDisplayListComponent,
+		MessageContentRowComponent,
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
@@ -53,8 +59,11 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 		ContactListComponent,
 		ContactRowComponent,
 		ContactTabComponent,
+		ChatHeaderComponent,
 		ChatListComponent,
 		ChatRowComponent,
+		MessageDisplayListComponent,
+		MessageContentRowComponent,
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,

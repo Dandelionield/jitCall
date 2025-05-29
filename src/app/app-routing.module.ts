@@ -38,6 +38,12 @@ const routes: Routes = [
 		loadChildren: () => import('./pages/contact/contact-update-form/contact-update-form.module').then( m => m.ContactUpdateFormPageModule),
 		canActivate: [AuthGuard]
 
+	}, {
+
+		path: 'chat/:id',
+		loadChildren: () => import('./pages/chat/chat/chat.module').then( m => m.ChatPageModule),
+		canActivate: [AuthGuard]
+
 	},
 
 

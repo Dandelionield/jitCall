@@ -1,0 +1,82 @@
+.chat-toolbar {
+
+	--background: var(--ion-color-step-50);
+	--border-width: 0;
+	--padding-top: 8px;
+	--padding-bottom: 8px;
+	--padding-start: 12px;
+	--padding-end: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+	border-bottom: 1px solid var(--ion-color-step-100);
+
+}
+
+.back-button {
+
+	--color: var(--ion-color-primary);
+	--icon-font-size: 24px;
+	--padding-start: 0;
+	--padding-end: 0;
+	margin-right: 8px;
+
+}
+
+.chat-avatar {
+
+	width: 40px;
+	height: 40px;
+	margin-right: 12px;
+	
+	img {
+
+		border-radius: 50%;
+		object-fit: cover;
+		border: 1px solid var(--ion-color-step-100);
+
+	}
+
+}
+
+.chat-info {
+
+	flex: 1;
+	min-width: 0;
+	
+	.chat-name {
+
+		font-size: 1.1rem;
+		font-weight: 500;
+		color: var(--ion-color-step-900);
+		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+	}
+	
+	.chat-status {
+
+		font-size: 0.8rem;
+		color: var(--ion-color-step-600);
+		margin: 0;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+
+	}
+
+}
+
+.action-button {
+
+	--color: var(--ion-color-step-700);
+	--padding-start: 6px;
+	--padding-end: 6px;
+	
+	ion-icon {
+
+		font-size: 1.4rem;
+
+	}
+
+}

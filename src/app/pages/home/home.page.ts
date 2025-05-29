@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { UserService } from '@core/services/user/user.service';
 import { ChatService } from '@core/services/chat/chat.service';
+import { MessageService } from '@core/services/message/message.service';
 import { ContactService } from '@core/services/contact/contact.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@core/services/contact/entity/contact.entity';
@@ -20,9 +21,23 @@ import { Subscription } from 'rxjs';
 
 	public showChats: boolean = true;
 
-	public constructor(){}
+	public constructor(private swalService: SwalService){}
 
-	public ngOnInit(): void {}
+	public ngOnInit(): void {
+
+		/*this.messageService.setSuperKey('phCn3NGNkavHOrJYVs0W');
+
+		this.messageService.findAll().subscribe({
+
+			next: (t) => {
+
+				console.log(t);
+
+			}, error: (e: any) => this.swalService.showException('Error', e.message)
+
+		});/**/
+
+	}
 
 	public ngOnDestroy(): void {}
 

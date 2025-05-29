@@ -12,7 +12,7 @@
 
 			<div class="text-container">
 
-				<h3>{{ getChatName() }}</h3>
+				<h6><b>{{ getChatName() }}</b></h6>
 
 				<p class="last-message">
 
@@ -21,7 +21,11 @@
 				</p>
 
 			</div>
-			
+
+		</div>
+
+		<div class="timestamp-container">
+
 			<div class="timestamp">
 
 				{{ formatTimestamp(chat.updatedAt) }}

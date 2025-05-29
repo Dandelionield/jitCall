@@ -10,6 +10,7 @@ import { provideAuth, getAuth } from '@angular/fire/auth';
 import { UserService } from './services/user/user.service';
 import { ContactService } from './services/contact/contact.service';
 import { ChatService } from './services/chat/chat.service';
+import { MessageService } from './services/message/message.service';
 import { AuthService } from './services/auth/auth.service';
 import { AuthGuard } from './guards/auth/auth.guard';
 import { RavishingService } from './services/ravishing/ravishing.service';

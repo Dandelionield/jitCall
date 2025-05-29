@@ -1,0 +1,106 @@
+.avatar-container {
+
+	width: 48px;
+	flex-shrink: 0;
+	display: flex;
+	justify-content: center;
+
+}
+
+.message-row {
+
+	display: flex;
+	margin-bottom: 16px;
+	align-items: flex-start;
+	
+	&.current-user {
+
+		flex-direction: row-reverse;
+
+	}
+
+}
+
+.avatar {
+
+	width: 32px;
+	height: 32px;
+	margin: 0 8px;
+	flex-shrink: 0;
+	
+	img {
+
+		border-radius: 50%;
+		object-fit: cover;
+
+	}
+
+}
+
+.message-content {
+
+	max-width: calc(100% - 60px);
+	max-width: 60%;
+	
+	.sender-name {
+
+		font-size: 0.75rem;
+		color: var(--ion-color-medium);
+		margin-bottom: 4px;
+		margin-left: 8px;
+
+	}
+	
+	.bubble {
+
+		padding: 12px;
+		border-radius: 16px;
+		background: var(--ion-color-light);
+		color: var(--ion-color-dark);
+		position: relative;
+		
+		&.deleted {
+
+			background: transparent;
+			font-style: italic;
+
+		}
+		
+		.modified {
+
+			font-size: 0.75rem;
+			color: var(--ion-color-medium);
+
+		}
+
+	}
+	
+	.timestamp {
+
+		font-size: 0.6rem;
+		color: var(--ion-color-medium);
+		margin-top: 4px;
+		text-align: right;
+	}
+
+}
+
+.current-user .message-content {
+
+	.bubble {
+
+		color: white;
+
+	}
+	
+	.timestamp {
+
+		text-align: left;
+
+	}
+
+}
+
+.deleted-text {
+	color: var(--ion-color-medium);
+}

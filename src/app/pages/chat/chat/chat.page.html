@@ -1,0 +1,33 @@
+<app-loading></app-loading>
+
+	@if(chat){
+
+		<app-chat-header [chat] = "chat" [user_id] = "user_id"></app-chat-header>
+
+		<ion-content>
+
+			<app-message-display-list [chat]="chat"></app-message-display-list>
+
+			<ion-footer>
+
+				<ion-toolbar>
+
+					<ion-textarea [(ngModel)]="text" placeholder="Type a message" rows="1" autoGrow="true" (keyup.enter)="send()"></ion-textarea>
+
+					<ion-buttons slot="end">
+
+						<ion-button (click)="send()">
+
+							<ion-icon name="send"></ion-icon>
+
+						</ion-button>
+
+					</ion-buttons>
+
+				</ion-toolbar>
+
+			</ion-footer>
+
+		</ion-content>
+
+	}

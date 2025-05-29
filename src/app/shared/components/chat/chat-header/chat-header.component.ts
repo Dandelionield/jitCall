@@ -2,20 +2,18 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ContactService } from '@core/services/contact/contact.service';
 import { UserService } from '@core/services/user/user.service';
 import { SwalService } from '@shared/services/swal/swal.service';
-import { Router } from '@angular/router';
 import { Chat } from '@core/services/chat/entity/chat.entity';
 import { User } from '@core/services/user/entity/user.entity';
 import { Contact } from '@core/services/contact/entity/contact.entity';
-import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
 
-	selector: 'app-chat-row',
-	templateUrl: './chat-row.component.html',
-	styleUrls: ['./chat-row.component.scss'],
+	selector: 'app-chat-header',
+	templateUrl: './chat-header.component.html',
+	styleUrls: ['./chat-header.component.scss'],
 	standalone: false
 
-}) export class ChatRowComponent implements OnInit {
+}) export class ChatHeaderComponent implements OnInit {
 
 	@Input() public chat!: Chat;
 	@Input() public user_id!: string;
@@ -26,11 +24,10 @@ import { Timestamp } from '@angular/fire/firestore';
 		private contactService: ContactService,
 		private userService: UserService,
 		private swalService: SwalService,
-		private router: Router
 
 	) {}
 
-	public ngOnInit(): void {
+	public ngOnInit() {
 
 		this.loadContact();
 
@@ -89,33 +86,6 @@ import { Timestamp } from '@angular/fire/firestore';
 			}
 
 		}
-
-	}
-
-	public formatTimestamp(timestamp?: Timestamp): string {
-
-		if (!timestamp) return '';
-		
-		const date = timestamp.toDate();
-
-		return date.toLocaleTimeString('en-US', {
-
-			hour: 'numeric',
-			minute: '2-digit',
-			hour12: true
-
-		}) + ', ' + date.toLocaleDateString('en-US', {
-
-			month: 'short',
-			day: 'numeric'
-
-		});
-
-	}
-
-	public navigateToChat(): void {
-
-		this.router.navigate(['/chat', this.chat.id]);
 
 	}
 

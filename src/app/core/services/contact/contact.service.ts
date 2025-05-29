@@ -19,11 +19,11 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 	private readonly superCollectionName: string = environment.firebase.collections.user.name;
 	private readonly collectionName: string = environment.firebase.collections.contact.name;
 	private readonly collectionIDField: string = environment.firebase.collections.contact.idField;
-	private superKey!: string;
+	private superKey!: User['id'];
 
 	public constructor(private firestore: Firestore) {}
 
-	public setSuperKey(superKey: string): void{
+	public setSuperKey(superKey: User['id']): void{
 
 		this.superKey = superKey;
 

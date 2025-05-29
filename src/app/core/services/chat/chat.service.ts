@@ -66,7 +66,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 				collection(this.firestore, this.collectionName),
 				where('chatters', 'array-contains', user_key),
-				orderBy('createdAt', 'desc')
+				orderBy('updatedAt', 'desc')
 
 			), { 
 

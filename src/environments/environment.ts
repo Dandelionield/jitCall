@@ -29,6 +29,11 @@ export const environment = {
 				name: 'chat',
 				idField: 'id'
 
+			}, message: {
+
+				name: 'message',
+				idField: 'id'
+
 			}
 
 		}

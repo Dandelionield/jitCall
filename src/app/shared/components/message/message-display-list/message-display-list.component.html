@@ -1,0 +1,13 @@
+<ion-content class="message-list-container">
+
+	<ion-list lines="none">
+
+		@for (message of messages; track message.message.id) {
+
+			<app-message-content-row [message]="message.message" [user_id]="user_id" [showAvatar]="message.showAvatar"></app-message-content-row>
+
+		}
+
+	</ion-list>
+
+</ion-content>
