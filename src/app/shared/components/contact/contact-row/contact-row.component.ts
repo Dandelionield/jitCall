@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Contact } from '@core/services/contact/entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { Router } from '@angular/router';
 import { ContactTabService } from '@shared/services/contact-tab/contact-tab.service';
 
@@ -17,6 +18,7 @@ import { ContactTabService } from '@shared/services/contact-tab/contact-tab.serv
 		required: true
 
 	}) public contact!: Contact;
+	@Input() public user_id: User['id'];
 
 	public isExpanded = false;
 

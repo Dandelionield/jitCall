@@ -2,7 +2,7 @@
 
 	<div class="avatar-container">
 
-		@if (showAvatar) {
+		@if (showAvatar && isGroup) {
 
 			<ion-avatar class="avatar">
 
@@ -16,7 +16,7 @@
 
 	<div class="message-content">
 
-		@if (!isCurrentUser() && showAvatar) {
+		@if (!isCurrentUser() && showAvatar && isGroup) {
 
 			<div class="sender-name">{{ getChatterName() }}</div>
 

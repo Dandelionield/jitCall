@@ -1,6 +1,6 @@
 <ion-header>
 
-	@if (chat){
+	@if (chat) {
 
 		<ion-toolbar class="chat-toolbar">
 
@@ -10,25 +10,29 @@
 
 			</ion-buttons>
 
-			<ion-avatar class="chat-avatar">
+			<div class="header-content">
 
-				<img [src]="getChatPicture()" alt="Chat picture">
+				<ion-avatar class="chat-avatar">
 
-			</ion-avatar>
+					<img [src]="getChatPicture()" alt="Chat picture">
 
-			<div class="chat-info">
+				</ion-avatar>
 
-				<h2 class="chat-name">{{ getChatName() }}</h2>
+				<div class="chat-info">
 
-				@if(chat.typo){
+					<h2 class="chat-name">{{ getChatName() }}</h2>
 
-					<p class="chat-status">Group • {{ chat.chatters.length }} members</p>
+					@if(chat.typo) {
 
-				}@else{
+						<p class="chat-status">Group • {{ chat.chatters.length }} members</p>
 
-					<p class="chat-status">Online</p>
+					}@else{
 
-				}
+						<p class="chat-status"></p>
+
+					}
+
+				</div>
 
 			</div>
 

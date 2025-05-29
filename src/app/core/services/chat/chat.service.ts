@@ -40,6 +40,43 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 	}
 
+	public async findOneByHash(hash: Chat['hash']): Promise<Chat | undefined> {
+
+		try {
+
+			return getDocs(query(
+
+				collection(this.firestore, this.collectionName),
+				where('hash', '==', hash),
+				limit(1)
+
+			)).then((snapshot) => {
+
+				if (snapshot.empty) {
+
+					return undefined;
+
+				}
+
+				const doc = snapshot.docs[0];
+
+				return {
+
+					id: doc.id,
+					...doc.data() as Chat
+
+				};
+
+			}) as Promise<Chat | undefined>;
+
+		}catch(e: any){
+
+			throw new FirebaseError('Error', e.message);
+
+		}
+
+	}
+
 	public findAll(): Observable<Array<Chat>> {
 
 		try{

@@ -8,7 +8,7 @@ import { map } from 'rxjs/operators';
 import { Observable, from } from 'rxjs';
 import { FirebaseError } from '@angular/fire/app';
 
-import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, setDoc, query, where, limit } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, doc, getDocs, getDoc, setDoc, query, where, orderBy, limit } from '@angular/fire/firestore';
 
 @Injectable({
 
@@ -114,9 +114,14 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 
 		try{
 
-			return collectionData(collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`), {
+			return collectionData(query(
 
-				idField: this.collectionIDField as keyof Contact
+				collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
+				orderBy('updatedAt', 'desc')
+
+			), { 
+
+				idField: this.collectionIDField as keyof Contact 
 
 			}) as Observable<Array<Contact>>;
 

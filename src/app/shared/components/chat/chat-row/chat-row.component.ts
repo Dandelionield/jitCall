@@ -78,7 +78,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 					const cont: Contact | undefined = await this.contactService.findOne(key);
 
-					this.contact = cont ? cont : await this.userService.findOne(this.user_id);
+					this.contact = cont ? cont : await this.userService.findOne(key);
 
 				}catch(e: any){
 

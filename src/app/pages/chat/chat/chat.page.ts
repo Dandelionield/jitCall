@@ -58,7 +58,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 		try{
 
-			if (this.user_id!=='' && this.text!=='' && this.chat){
+			if (this.user_id!=='' && backUpText!=='' && this.chat){
 
 				const at: Timestamp = Timestamp.fromDate(new Date());
 
@@ -74,9 +74,18 @@ import { Timestamp } from '@angular/fire/firestore';
 
 				};
 
+				const chat: Partial<Chat> = {
+
+					lastContent: backUpText,
+					updatedAt: at
+
+				};
+
 				this.messageService.setSuperKey(this.chat.id);
 
 				await this.messageService.insert(message);
+
+				this.chatService.update(this.chat.id, chat);
 
 			}
 

@@ -55,7 +55,7 @@ import { Firestore, collection, collectionData, addDoc, deleteDoc, updateDoc, do
 			return collectionData(query(
 
 				collection(this.firestore, `${this.superCollectionName}/${this.superKey}/${this.collectionName}`),
-				orderBy('createdAt', 'desc')
+				orderBy('createdAt', 'asc')
 
 			), { 
 

@@ -25,7 +25,7 @@
 
 	@if (isExpanded) {
 
-		<app-contact-tab [contact] = "contact" (click)="toggleExpansion($event)"></app-contact-tab>
+		<app-contact-tab [contact] = "contact" [user_id] = "user_id" (click)="toggleExpansion($event)"></app-contact-tab>
 
 	}
 

@@ -7,6 +7,7 @@ import { LoadingService } from '@shared/services/loading/loading.service';
 import { Router } from '@angular/router';
 import { User } from '@core/services/user/entity/user.entity';
 import { Contact } from '@core/services/contact/entity/contact.entity';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
 
@@ -61,6 +62,7 @@ import { Contact } from '@core/services/contact/entity/contact.entity';
 			}
 
 			const user: User | undefined = await this.userService.findOneByContact(contact.trim());
+			const at: Timestamp = Timestamp.fromDate(new Date());
 
 			if (!user){
 
@@ -75,7 +77,9 @@ import { Contact } from '@core/services/contact/entity/contact.entity';
 				surname: surname.trim(),
 				contact: contact.trim(),
 				email: email.trim(),
-				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`//picture
+				picture: `https://avatars.githubusercontent.com/u/${Math.floor(Math.random() * 131812794)}?v=4`,//picture
+				createdAt: at,
+				updatedAt: at
 
 			};
 

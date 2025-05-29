@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ContactService } from '@core/services/contact/contact.service';
 import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@core/services/contact/entity/contact.entity';
+import { User } from '@core/services/user/entity/user.entity';
 import { Router } from '@angular/router';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { SwalService } from '@shared/services/swal/swal.service';
@@ -17,6 +18,7 @@ import { Subscription } from 'rxjs';
 }) export class ContactListComponent implements OnInit, OnDestroy {
 
 	public contacts!: Array<Contact>;
+	public user_id: User['id'];
 	public searchText: string = "";
 	private contactsSub: Subscription | undefined = undefined;
 
@@ -28,19 +30,17 @@ import { Subscription } from 'rxjs';
 		private loadingService: LoadingService,
 		private router: Router
 
-	) {}
+	) {
+
+		const id: string | null = this.authService.getCurrentUser();
+
+		this.user_id = id ? id : '';
+
+	}
 
 	public ngOnInit(): void {
 
 		this.loadingService.show();
-
-		let id: string | null = this.authService.getCurrentUser();
-
-		if (id){
-
-			this.contactService.setSuperKey(id);
-
-		}
 
 		this.findAll();
 
@@ -57,6 +57,8 @@ import { Subscription } from 'rxjs';
 	}
 
 	public findAll(): void {
+
+		this.contactService.setSuperKey(this.user_id);
 
 		this.contactsSub = this.contactService.findAll().subscribe({
 

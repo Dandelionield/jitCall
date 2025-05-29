@@ -8,6 +8,7 @@ import { AuthService } from '@core/services/auth/auth.service';
 import { Contact } from '@core/services/contact/entity/contact.entity';
 import { User } from '@core/services/user/entity/user.entity';
 import { LoadingService } from '@shared/services/loading/loading.service';
+import { Timestamp } from '@angular/fire/firestore';
 import { SweetAlertResult } from 'sweetalert2';
 
 @Component({
@@ -183,13 +184,17 @@ import { SweetAlertResult } from 'sweetalert2';
 
 			}
 
+			const at: Timestamp = Timestamp.fromDate(new Date());
+
 			const conta: Contact = {
 
 				name: name,
 				surname: surname,
 				contact: cont,
 				email: email,
-				picture: this.contact.picture
+				picture: this.contact.picture,
+				createdAt: this.contact.createdAt,
+				updatedAt: at
 
 			};
 

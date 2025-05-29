@@ -4,7 +4,7 @@
 
 		@for (message of messages; track message.message.id) {
 
-			<app-message-content-row [message]="message.message" [user_id]="user_id" [showAvatar]="message.showAvatar"></app-message-content-row>
+			<app-message-content-row [message]="message.message" [user_id]="user_id" [isGroup] = "chat.typo" [showAvatar]="message.showAvatar"></app-message-content-row>
 
 		}
 

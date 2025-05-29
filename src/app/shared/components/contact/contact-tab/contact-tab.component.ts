@@ -1,13 +1,17 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from '@core/services/user/user.service';
 import { CallService } from '@shared/services/call/call.service';
+import { ChatService } from '@core/services/chat/chat.service';
 import { SwalService } from '@shared/services/swal/swal.service';
 import { LoadingService } from '@shared/services/loading/loading.service';
 import { Subscription, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Contact } from '@core/services/contact/entity/contact.entity';
 import { User } from '@core/services/user/entity/user.entity';
+import { Chat, hashChat } from '@core/services/chat/entity/chat.entity';
 import { isRavishing } from '@models/ravishing.model';
+import { Timestamp } from '@angular/fire/firestore';
 
 @Component({
 
@@ -23,6 +27,7 @@ import { isRavishing } from '@models/ravishing.model';
 		required: true
 
 	}) public contact!: Contact;
+	@Input() public user_id: User['id'];
 
 	public isCalling$: Observable<boolean> = this.callService.isCalling$;
 	private callSub: Subscription | undefined = undefined;
@@ -30,9 +35,11 @@ import { isRavishing } from '@models/ravishing.model';
 	public constructor(
 
 		private callService: CallService,
+		private chatService: ChatService,
 		private swalService: SwalService,
 		private userService: UserService,
 		private loadingService: LoadingService,
+		private router: Router
 
 	) {}
 
@@ -99,6 +106,63 @@ import { isRavishing } from '@models/ravishing.model';
 		}catch(e: any){
 
 			this.callService.hangUp();
+			this.swalService.showException('Error', e.message);
+
+		}finally{
+
+			this.loadingService.hide();
+
+		}
+
+	}
+
+	public async chat(): Promise<void> {
+
+		this.loadingService.show('Generating Chat');
+
+		try{
+
+			if (this.user_id && this.contact && this.contact.id){
+
+				const hash: string = await hashChat([this.user_id, this.contact.id], false);
+
+				let chat: Chat | undefined = await this.chatService.findOneByHash(hash);
+
+				if (!chat){
+
+					const at: Timestamp = Timestamp.fromDate(new Date());
+
+					chat = {
+
+						chatters: [this.user_id, this.contact.id],
+						lastContent: '',
+						name: '...',
+						picture: 'https://avatars.githubusercontent.com/u/0?v=4',
+						typo: false,
+						hash: hash,
+						createdAt: at,
+						updatedAt: at
+
+					};
+
+					const id: string | undefined = await this.chatService.insert(chat);
+
+					if (id){
+
+						this.router.navigate(['/chat', id]);
+
+					}
+
+				}else{
+
+					this.router.navigate(['/chat', chat.id]);
+
+				}
+
+			}
+
+		}catch(e: any){
+
 			this.swalService.showException('Error', e.message);
 
 		}finally{

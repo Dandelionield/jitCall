@@ -18,6 +18,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 	@Input() public message!: Message;
 	@Input() public user_id: User['id'];
+	@Input() public isGroup!: boolean;
 	@Input() public showAvatar: boolean = false;
 	public contact: Contact | User | undefined = undefined;
 
@@ -90,7 +91,7 @@ import { Timestamp } from '@angular/fire/firestore';
 
 				const cont: Contact | undefined = await this.contactService.findOne(key);
 
-				this.contact = cont ? cont : await this.userService.findOne(this.user_id);
+				this.contact = cont ? cont : await this.userService.findOne(key);
 
 			}catch(e: any){
 

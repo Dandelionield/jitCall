@@ -101,7 +101,7 @@ import { Subscription } from 'rxjs';
 
 			next: (t) => {
 
-				this.messages = this.processMessages(t.reverse()).reverse();
+				this.messages = this.processMessages(t).reverse();
 				this.loadingService.hide();
 
 			}, error: (e: any) => this.swalService.showException('Error', e.message)
