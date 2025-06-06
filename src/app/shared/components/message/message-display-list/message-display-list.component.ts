@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, ElementRef, AfterViewChecked } from '@angular/core';
+import { IonContent } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { AuthService } from '@core/services/auth/auth.service';
 import { MessageService } from '@core/services/message/message.service';
@@ -18,6 +19,7 @@ import { Subscription } from 'rxjs';
 
 }) export class MessageDisplayListComponent implements OnInit, OnDestroy {
 
+	@ViewChild(IonContent) ionContent!: IonContent;
 	@Input() public chat!: Chat;
 	public messages: Array<{message: Message, showAvatar: boolean}> = [];
 	public user_id: User['id'];
@@ -102,11 +104,22 @@ import { Subscription } from 'rxjs';
 			next: (t) => {
 
 				this.messages = this.processMessages(t).reverse();
+				this.scrollToBottom();
 				this.loadingService.hide();
 
 			}, error: (e: any) => this.swalService.showException('Error', e.message)
 
 		});
+
+	}
+
+	private scrollToBottom(): void {
+
+		setTimeout(() => {
+
+			this.ionContent.scrollToBottom();
+
+		}, 0);
 
 	}
 

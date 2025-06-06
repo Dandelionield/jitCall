@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 
+import { Keyboard } from '@capacitor/keyboard';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -18,9 +20,11 @@ import { UserCardComponent } from './components/user/user-card/user-card.compone
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/loading/loading.component';
 import { CallComponent } from './components/call/call.component';
+import { KeyboardComponent } from './components/keyboard/keyboard.component';
 
 import { LoadingService } from './services/loading/loading.service';
 import { CallService } from './services/call/call.service';
+import { KeyboardService } from './services/keyboard/keyboard.service';
 import { SwalService } from './services/swal/swal.service';
 import { ContactTabService } from './services/contact-tab/contact-tab.service';
 
@@ -39,7 +43,8 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
-		CallComponent
+		CallComponent,
+		KeyboardComponent
 
 	], imports: [
 
@@ -67,14 +72,21 @@ import { ContactTabService } from './services/contact-tab/contact-tab.service';
 		UserCardComponent,
 		HeaderComponent,
 		LoadingComponent,
-		CallComponent
+		CallComponent,
+		KeyboardComponent
 
 	], providers: [
 
 		LoadingService,
 		SwalService,
 		CallService,
-		ContactTabService
+		ContactTabService,
+		KeyboardService, {
+
+			provide: Keyboard,
+			useValue: Keyboard
+
+		}
 
 	]
 

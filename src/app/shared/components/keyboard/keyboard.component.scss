@@ -1,0 +1,14 @@
+.container {
+
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+
+	ion-toolbar {
+
+		flex: 1;
+		padding: 8px 0;
+
+	}
+
+}

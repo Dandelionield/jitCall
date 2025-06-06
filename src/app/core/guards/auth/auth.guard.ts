@@ -26,7 +26,7 @@ import { Observable } from 'rxjs';
 
 				}
 
-				const currentToken = this.authService.getCurrentToken();
+				/*const currentToken = this.authService.getCurrentToken();
 				const storedToken = localStorage.getItem('access_token');
 
 				if (currentToken !== storedToken){
@@ -35,8 +35,8 @@ import { Observable } from 'rxjs';
 					this.router.navigate(['/']);
 					return false;
 
-				}
-				
+				}/**/
+
 				return true;
 
 			})

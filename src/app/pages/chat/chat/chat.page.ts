@@ -58,7 +58,9 @@ import { Timestamp } from '@angular/fire/firestore';
 
 		try{
 
-			if (this.user_id!=='' && backUpText!=='' && this.chat){
+			const allow: boolean = backUpText.trim().length>0 && this.user_id!=='' && this.chat!==undefined;
+
+			if (allow){
 
 				const at: Timestamp = Timestamp.fromDate(new Date());
 

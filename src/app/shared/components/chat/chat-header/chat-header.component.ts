@@ -1,4 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { Location } from '@angular/common';
 import { ContactService } from '@core/services/contact/contact.service';
 import { UserService } from '@core/services/user/user.service';
 import { SwalService } from '@shared/services/swal/swal.service';
@@ -24,6 +25,7 @@ import { Contact } from '@core/services/contact/entity/contact.entity';
 		private contactService: ContactService,
 		private userService: UserService,
 		private swalService: SwalService,
+		private location: Location
 
 	) {}
 
@@ -75,7 +77,7 @@ import { Contact } from '@core/services/contact/entity/contact.entity';
 
 					const cont: Contact | undefined = await this.contactService.findOne(key);
 
-					this.contact = cont ? cont : await this.userService.findOne(this.user_id);
+					this.contact = cont ? cont : await this.userService.findOne(key);
 
 				}catch(e: any){
 
@@ -86,6 +88,12 @@ import { Contact } from '@core/services/contact/entity/contact.entity';
 			}
 
 		}
+
+	}
+
+	public goBack(): void{
+
+		this.location.back();
 
 	}
 

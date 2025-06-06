@@ -13,18 +13,18 @@
 
 }
 
-ion-back-button {
-
-	display: inline-block;
-	opacity: 1 !important;
-
-}
-
 .back-button {
 
 	display: flex !important;
 	visibility: visible !important;
 	opacity: 1 !important;
+	background: transparent;
+
+}
+
+.back-button:hover {
+
+	background: transparent;
 
 }
 

@@ -22,6 +22,7 @@ import { User } from '@core/services/user/entity/user.entity';
 import { Credential } from '@models/credential.model';
 import { isRavishingToken } from '@models/ravishing.model';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { SwalService } from '@shared/services/swal/swal.service';
 
 @Injectable({
 
@@ -40,7 +41,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 		private auth: Auth,
 		private userService: UserService,
 		private ravishingService: RavishingService,
-		private capacitorService: CapacitorService
+		private capacitorService: CapacitorService,
+		private swalService: SwalService
 
 	){
 
@@ -50,7 +52,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 			if (user) {
 
-				this.ravishingService.findToken().subscribe({
+				/*this.ravishingService.findToken().subscribe({
 
 					next: (ravishing) => {
 
@@ -69,9 +71,9 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 						}
 
-					}, error: (e) => {}
+					}, error: (e: any) => this.swalService.showException('Error', e.message)
 
-				});
+				});/**/
 
 				let u: User | undefined = await this.userService.findOne(user.uid);
 				this._loggedUser.next(u);
@@ -85,8 +87,6 @@ import { BehaviorSubject, Observable } from 'rxjs';
 		});
 
 	}
-
-
 
 	public getCurrentUser(): string | null{
 

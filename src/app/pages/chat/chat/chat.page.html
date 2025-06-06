@@ -4,11 +4,15 @@
 
 		<app-chat-header [chat] = "chat" [user_id] = "user_id"></app-chat-header>
 
-		<ion-content>
+		<ion-content [fullscreen]="true" [scrollY]="true">
 
 			<app-message-display-list [chat]="chat"></app-message-display-list>
 
-			<ion-footer>
+		</ion-content>
+
+		<ion-footer>
+
+			<app-keyboard>
 
 				<ion-toolbar>
 
@@ -26,8 +30,8 @@
 
 				</ion-toolbar>
 
-			</ion-footer>
+			</app-keyboard>
 
-		</ion-content>
+		</ion-footer>
 
 	}
